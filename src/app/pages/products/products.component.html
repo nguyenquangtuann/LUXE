@@ -1,0 +1,106 @@
+<app-header />
+<app-cart-sidebar />
+
+<main class="products-page">
+    <div class="products-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">{{ pageTitle() }}</h1>
+            <p class="page-description">
+                Discover our curated collection of premium fashion pieces
+            </p>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="filters-bar">
+            <div class="filters-left">
+                <div class="filter-group">
+                    <label class="filter-label">Category</label>
+                    <select class="filter-select" [ngModel]="selectedCategory()"
+                        (ngModelChange)="onCategoryChange($event)">
+                        @for (cat of categories; track cat) {
+                        <option [value]="cat">{{ cat }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Sort By</label>
+                    <select class="filter-select" [ngModel]="sortBy()" (ngModelChange)="onSortChange($event)">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name">Name A-Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filters-right">
+                <span class="results-count">{{ filteredProducts().length }} products</span>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid">
+            @for (product of filteredProducts(); track product.id) {
+            <article class="product-card" (mouseenter)="hoveredProduct.set(product.id)"
+                (mouseleave)="hoveredProduct.set(null)">
+
+                <a [routerLink]="['/products', product.id]" class="image-container">
+                    <img [src]="hoveredProduct() === product.id ? product.imageHover : product.image"
+                        [alt]="product.name" class="product-image" [class.zoomed]="hoveredProduct() === product.id" />
+
+                    <button class="wishlist-btn" [class.active]="favoritesService.isFavorite(product.id)"
+                        aria-label="Add to wishlist" (click)="toggleFavorite($event, product)">
+                        <svg viewBox="0 0 24 24"
+                            [attr.fill]="favoritesService.isFavorite(product.id) ? '#ef4444' : 'none'"
+                            stroke="currentColor">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+                                stroke-width="1.5" />
+                        </svg>
+                    </button>
+                </a>
+
+                <div class="product-info">
+                    <span class="product-category">{{ product.category }}</span>
+                    <a [routerLink]="['/products', product.id]" class="product-name">{{ product.name }}</a>
+                    <p class="product-price">
+                        <span class="currency">$</span>{{ product.price.toLocaleString() }}
+                    </p>
+                </div>
+
+                <button class="add-to-cart-btn" [class.success]="addedToCart()[product.id]"
+                    (click)="addToCart(product)">
+                    @if (addedToCart()[product.id]) {
+                    <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>Added!</span>
+                    } @else {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-width="1.5" />
+                        <line x1="3" y1="6" x2="21" y2="6" stroke-width="1.5" />
+                        <path d="M16 10a4 4 0 01-8 0" stroke-width="1.5" />
+                    </svg>
+                    <span>Add to Cart</span>
+                    }
+                </button>
+            </article>
+            }
+        </div>
+
+        @if (filteredProducts().length === 0) {
+        <div class="no-results">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8" stroke-width="2" />
+                <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <h3>No products found</h3>
+            <p>Try adjusting your filters or search terms</p>
+        </div>
+        }
+    </div>
+</main>
+
+<app-footer />

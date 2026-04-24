@@ -1,0 +1,247 @@
+<main class="contact-page">
+    <!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="hero-bg">
+            <div class="hero-pattern"></div>
+            <div class="hero-gradient"></div>
+        </div>
+        <div class="hero-content" [class.visible]="heroVisible()">
+            <span class="hero-label">
+                <span class="label-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                </span>
+                Get in Touch
+            </span>
+            <h1 class="hero-title">We'd Love to<br><span class="accent">Hear From You</span></h1>
+            <p class="hero-subtitle">Our dedicated team is here to assist you with any inquiries about our collections,
+                services, or bespoke creations</p>
+        </div>
+    </section>
+
+    <div class="contact-main">
+        <div class="container">
+            <!-- Contact Cards -->
+            <section class="contact-cards" #cardsSection>
+                <div class="cards-grid">
+                    @for (card of contactCards; track card.title; let i = $index) {
+                    <div class="contact-card" [class.visible]="cardsVisible()"
+                        [style.animation-delay]="(i * 100) + 'ms'">
+                        <div class="card-icon">
+                            <span [innerHTML]="card.icon"></span>
+                        </div>
+                        <h3 class="card-title">{{ card.title }}</h3>
+                        <div class="card-content">
+                            @for (line of card.lines; track line) {
+                            <p>{{ line }}</p>
+                            }
+                        </div>
+                        @if (card.action) {
+                        <a [href]="card.actionLink" class="card-action">
+                            {{ card.action }}
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </a>
+                        }
+                    </div>
+                    }
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <div class="contact-grid" #formSection>
+                <!-- Contact Form -->
+                <div class="form-wrapper" [class.visible]="formVisible()">
+                    <div class="form-header">
+                        <span class="section-label">Send a Message</span>
+                        <h2 class="section-title">Let's Start a Conversation</h2>
+                        <p class="section-description">
+                            Fill out the form below and we'll get back to you within 24 hours
+                        </p>
+                    </div>
+
+                    @if (isSubmitted()) {
+                    <div class="success-message animate-scale-in">
+                        <div class="success-animation">
+                            <div class="success-circle">
+                                <svg class="checkmark-svg" viewBox="0 0 52 52">
+                                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+                                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Message Sent Successfully!</h3>
+                        <p>Thank you for reaching out. Our team will respond within 24 hours.</p>
+                        <button class="btn-primary" (click)="resetForm()">
+                            <span>Send Another Message</span>
+                        </button>
+                    </div>
+                    } @else {
+                    <form class="contact-form" (ngSubmit)="submitForm()">
+                        <div class="form-row">
+                            <div class="form-group" [class.focused]="focusedField() === 'firstName'"
+                                [class.filled]="formData.firstName">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" [(ngModel)]="formData.firstName" name="firstName"
+                                    required (focus)="focusedField.set('firstName')" (blur)="focusedField.set(null)" />
+                                <span class="input-line"></span>
+                            </div>
+                            <div class="form-group" [class.focused]="focusedField() === 'lastName'"
+                                [class.filled]="formData.lastName">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" [(ngModel)]="formData.lastName" name="lastName"
+                                    required (focus)="focusedField.set('lastName')" (blur)="focusedField.set(null)" />
+                                <span class="input-line"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group" [class.focused]="focusedField() === 'email'"
+                                [class.filled]="formData.email">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" [(ngModel)]="formData.email" name="email" required
+                                    (focus)="focusedField.set('email')" (blur)="focusedField.set(null)" />
+                                <span class="input-line"></span>
+                            </div>
+                            <div class="form-group" [class.focused]="focusedField() === 'phone'"
+                                [class.filled]="formData.phone">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" [(ngModel)]="formData.phone" name="phone"
+                                    (focus)="focusedField.set('phone')" (blur)="focusedField.set(null)" />
+                                <span class="input-line"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" [class.focused]="focusedField() === 'subject'"
+                            [class.filled]="formData.subject">
+                            <label for="subject">Subject</label>
+                            <select id="subject" [(ngModel)]="formData.subject" name="subject" required
+                                (focus)="focusedField.set('subject')" (blur)="focusedField.set(null)">
+                                <option value=""></option>
+                                <option value="general">General Inquiry</option>
+                                <option value="order">Order Status</option>
+                                <option value="returns">Returns & Exchanges</option>
+                                <option value="product">Product Information</option>
+                                <option value="appointment">Book an Appointment</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <span class="input-line"></span>
+                        </div>
+
+                        <div class="form-group" [class.focused]="focusedField() === 'message'"
+                            [class.filled]="formData.message">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" [(ngModel)]="formData.message" name="message" rows="5" required
+                                (focus)="focusedField.set('message')" (blur)="focusedField.set(null)"></textarea>
+                            <span class="input-line"></span>
+                        </div>
+
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="newsletter" [(ngModel)]="formData.newsletter"
+                                name="newsletter" />
+                            <label for="newsletter">
+                                <span class="checkbox-box">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M20 6L9 17l-5-5" stroke-width="3" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </span>
+                                <span>Subscribe to our newsletter for exclusive updates</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn" [disabled]="isSubmitting()"
+                            [class.submitting]="isSubmitting()">
+                            @if (isSubmitting()) {
+                            <span class="btn-loader">
+                                <span class="loader-dot"></span>
+                                <span class="loader-dot"></span>
+                                <span class="loader-dot"></span>
+                            </span>
+                            <span>Sending...</span>
+                            } @else {
+                            <span>Send Message</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22,2 15,22 11,13 2,9" />
+                            </svg>
+                            }
+                        </button>
+                    </form>
+                    }
+                </div>
+
+                <!-- Map & Info -->
+                <div class="info-wrapper" [class.visible]="formVisible()">
+                    <!-- Map -->
+                    <div class="map-container">
+                        <div class="map-placeholder">
+                            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&h=500&fit=crop"
+                                alt="Paris Location" />
+                            <div class="map-overlay">
+                                <div class="map-pin">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                        <circle cx="12" cy="10" r="3" fill="white" />
+                                    </svg>
+                                </div>
+                                <span class="map-label">LUXE Flagship Store</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="social-section">
+                        <h3 class="social-title">Connect With Us</h3>
+                        <div class="social-grid">
+                            @for (social of socials; track social.name) {
+                            <a [href]="social.link" class="social-card" [attr.aria-label]="social.name">
+                                <span class="social-icon" [innerHTML]="social.icon"></span>
+                                <span class="social-name">{{ social.name }}</span>
+                                <span class="social-handle">{{ social.handle }}</span>
+                            </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store Locations -->
+            <section class="locations-section" #locationsSection>
+                <div class="locations-header" [class.visible]="locationsVisible()">
+                    <span class="section-label">Our Boutiques</span>
+                    <h2 class="section-title">Visit Us Worldwide</h2>
+                </div>
+                <div class="locations-grid">
+                    @for (location of locations; track location.city; let i = $index) {
+                    <div class="location-card" [class.visible]="locationsVisible()"
+                        [style.animation-delay]="(i * 150) + 'ms'">
+                        <div class="location-image">
+                            <img [src]="location.image" [alt]="location.city" />
+                            <div class="location-badge">{{ location.flag }}</div>
+                        </div>
+                        <div class="location-info">
+                            <h3>{{ location.city }}</h3>
+                            <p class="location-address">{{ location.address }}</p>
+                            <p class="location-hours">{{ location.hours }}</p>
+                            <a href="#" class="location-link">
+                                <span>Get Directions</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                                    <polyline points="15,3 21,3 21,9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+<app-footer />

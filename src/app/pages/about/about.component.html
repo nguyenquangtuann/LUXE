@@ -1,0 +1,227 @@
+<main class="about-page">
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="hero-bg">
+            <div class="parallax-layer layer-1"></div>
+            <div class="parallax-layer layer-2"></div>
+            <div class="hero-gradient"></div>
+        </div>
+        <div class="hero-content" [class.visible]="heroVisible()">
+            <span class="hero-label animate-float">
+                <span class="label-line"></span>
+                Our Story
+                <span class="label-line"></span>
+            </span>
+            <h1 class="hero-title">
+                <span class="title-line">Crafting Timeless</span>
+                <span class="title-line accent">Elegance Since 1985</span>
+            </h1>
+            <p class="hero-subtitle">Where luxury meets artistry, and every piece tells a story of passion and precision
+            </p>
+            <div class="hero-scroll">
+                <div class="scroll-indicator">
+                    <div class="scroll-dot"></div>
+                </div>
+                <span>Scroll to explore</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story-section" #storySection>
+        <div class="container">
+            <div class="story-grid">
+                <div class="story-images" [class.visible]="storyVisible()">
+                    <div class="image-stack">
+                        <div class="image-main">
+                            <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&h=1000&fit=crop"
+                                alt="LUXE Atelier" />
+                            <div class="image-overlay"></div>
+                        </div>
+                        <div class="image-secondary">
+                            <img src="https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=300&fit=crop"
+                                alt="Craftsmanship" />
+                        </div>
+                        <div class="floating-badge">
+                            <span class="badge-number">40+</span>
+                            <span class="badge-text">Years of Excellence</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-content" [class.visible]="storyVisible()">
+                    <span class="section-label">The Beginning</span>
+                    <h2 class="section-title">A Vision of Excellence</h2>
+                    <div class="story-text">
+                        <p>
+                            LUXE was born from a simple yet profound belief: that exceptional craftsmanship
+                            and timeless design should be accessible to those who appreciate the finer things in life.
+                        </p>
+                        <p>
+                            Founded in 1985 by master artisan Jean-Pierre Dubois in the heart of Paris,
+                            our maison began as a small atelier dedicated to creating bespoke leather goods
+                            for a discerning clientele.
+                        </p>
+                        <p>
+                            Today, LUXE has evolved into a global symbol of luxury fashion, while remaining
+                            true to our founding principles of quality, authenticity, and understated elegance.
+                        </p>
+                    </div>
+                    <div class="story-signature">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop"
+                            alt="Founder" class="signature-avatar" />
+                        <div class="signature-info">
+                            <span class="signature-name">Jean-Pierre Dubois</span>
+                            <span class="signature-title">Founder & Creative Director</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section" #valuesSection>
+        <div class="container">
+            <div class="values-header" [class.visible]="valuesVisible()">
+                <span class="section-label">Our Philosophy</span>
+                <h2 class="section-title">The Pillars of LUXE</h2>
+                <p class="section-description">
+                    Every decision we make is guided by these core principles
+                </p>
+            </div>
+            <div class="values-grid">
+                @for (value of values; track value.title; let i = $index) {
+                <div class="value-card" [class.visible]="valuesVisible()" [style.animation-delay]="(i * 150) + 'ms'">
+                    <div class="value-icon">
+                        <div class="icon-glow"></div>
+                        <span [innerHTML]="value.icon"></span>
+                    </div>
+                    <h3 class="value-title">{{ value.title }}</h3>
+                    <p class="value-description">{{ value.description }}</p>
+                    <div class="value-number">0{{ i + 1 }}</div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section" #statsSection>
+        <div class="stats-bg">
+            <div class="stats-pattern"></div>
+        </div>
+        <div class="container">
+            <div class="stats-grid">
+                @for (stat of stats; track stat.label; let i = $index) {
+                <div class="stat-item" [class.visible]="statsVisible()" [style.animation-delay]="(i * 100) + 'ms'">
+                    <div class="stat-number">
+                        <span class="number-value">{{ stat.value }}</span>
+                        <span class="number-suffix">{{ stat.suffix }}</span>
+                    </div>
+                    <span class="stat-label">{{ stat.label }}</span>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Craftsmanship Section -->
+    <section class="craft-section" #craftSection>
+        <div class="container">
+            <div class="craft-grid">
+                <div class="craft-content" [class.visible]="craftVisible()">
+                    <span class="section-label">Artisanship</span>
+                    <h2 class="section-title">The Art of Craftsmanship</h2>
+                    <p class="craft-text">
+                        Every LUXE creation passes through the hands of our master artisans,
+                        each with decades of experience in their respective crafts. From the
+                        initial sketch to the final stitch, we demand nothing less than perfection.
+                    </p>
+                    <div class="craft-features">
+                        @for (feature of craftFeatures; track feature.title) {
+                        <div class="craft-feature">
+                            <div class="feature-icon">
+                                <span [innerHTML]="feature.icon"></span>
+                            </div>
+                            <div class="feature-content">
+                                <h4>{{ feature.title }}</h4>
+                                <p>{{ feature.description }}</p>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="craft-gallery" [class.visible]="craftVisible()">
+                    <div class="gallery-grid">
+                        <div class="gallery-item large">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=800&fit=crop"
+                                alt="Craftsmanship" />
+                            <div class="gallery-overlay">
+                                <span>Precision Stitching</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=400&h=400&fit=crop"
+                                alt="Artisan at work" />
+                            <div class="gallery-overlay">
+                                <span>Hand Selection</span>
+                            </div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1549439602-43ebca2327af?w=400&h=400&fit=crop"
+                                alt="Materials" />
+                            <div class="gallery-overlay">
+                                <span>Premium Materials</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section" #teamSection>
+        <div class="container">
+            <div class="team-header" [class.visible]="teamVisible()">
+                <span class="section-label">Leadership</span>
+                <h2 class="section-title">Meet Our Visionaries</h2>
+                <p class="section-description">
+                    The creative minds shaping the future of LUXE
+                </p>
+            </div>
+            <div class="team-grid">
+                @for (member of team; track member.name; let i = $index) {
+                <div class="team-card" [class.visible]="teamVisible()" [style.animation-delay]="(i * 100) + 'ms'">
+                    <div class="team-image">
+                        <img [src]="member.image" [alt]="member.name" />
+                        <div class="team-overlay">
+                            <div class="team-social">
+                                <a href="#" class="social-link">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
+                                    </svg>
+                                </a>
+                                <a href="#" class="social-link">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z" />
+                                        <rect x="2" y="9" width="4" height="12" />
+                                        <circle cx="4" cy="4" r="2" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">{{ member.name }}</h3>
+                        <span class="team-role">{{ member.role }}</span>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+</main>
+<app-footer />

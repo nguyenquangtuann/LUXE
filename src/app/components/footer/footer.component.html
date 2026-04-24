@@ -1,0 +1,80 @@
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <span class="footer-logo">LUXE</span>
+                <p class="footer-tagline">
+                    Elevating everyday elegance with premium craftsmanship
+                    and timeless design since 2015.
+                </p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Instagram" class="social-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <rect x="2" y="2" width="20" height="20" rx="5" stroke-width="1.5" />
+                            <circle cx="12" cy="12" r="4" stroke-width="1.5" />
+                            <circle cx="18" cy="6" r="1" fill="currentColor" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Twitter" class="social-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path
+                                d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+                                stroke-width="1.5" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Pinterest" class="social-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10" stroke-width="1.5" />
+                            <path d="M8 12c0-2 1.5-4 4-4s4 2 4 4c0 3-2 5-4 7" stroke-width="1.5" />
+                            <path d="M9 21l2-7" stroke-width="1.5" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4 class="footer-heading">Shop</h4>
+                <ul class="footer-list">
+                    <li><a routerLink="/products">All Products</a></li>
+                    <li><a routerLink="/products" [queryParams]="{category: 'Outerwear'}">Outerwear</a></li>
+                    <li><a routerLink="/products" [queryParams]="{category: 'Dresses'}">Dresses</a></li>
+                    <li><a routerLink="/products" [queryParams]="{category: 'Accessories'}">Accessories</a></li>
+                    <li><a routerLink="/products" [queryParams]="{category: 'Jewelry'}">Jewelry</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4 class="footer-heading">Company</h4>
+                <ul class="footer-list">
+                    <li><a routerLink="/about">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                    <li><a href="#">Stores</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4 class="footer-heading">Account</h4>
+                <ul class="footer-list">
+                    <li><a routerLink="/account">Sign In</a></li>
+                    <li><a routerLink="/account">Create Account</a></li>
+                    <li><a routerLink="/checkout">Checkout</a></li>
+                    <li><a routerLink="/search">Search</a></li>
+                    <li><a routerLink="/contact">Help</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">
+                © 2026 LUXE. All rights reserved.
+            </p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Settings</a>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,104 @@
+<section class="featured-section">
+    <div class="featured-container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <span class="section-label">Curated Selection</span>
+            <h2 class="section-title">Featured Products</h2>
+            <p class="section-description">
+                Discover our handpicked collection of premium pieces designed for the modern connoisseur
+            </p>
+
+            <!-- Category Filter Tabs -->
+            <div class="category-filter">
+                @for (category of categories; track category) {
+                <button class="category-tab" [class.active]="activeCategory() === category"
+                    (click)="selectCategory(category)">
+                    {{ category }}
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="products-grid">
+            @for (product of filteredProducts; track product.id; let i = $index) {
+            <article #productCard class="product-card" [class.visible]="visibleCards()[getOriginalIndex(product)]"
+                [style.--stagger-delay]="(i * 100) + 'ms'" (mouseenter)="onCardHover(getOriginalIndex(product), true)"
+                (mouseleave)="onCardHover(getOriginalIndex(product), false)">
+
+                <!-- Product Image Container -->
+                <div class="image-container">
+                    <a [routerLink]="['/products', product.id]" class="image-container">
+                        <img [src]="hoveredCard() === getOriginalIndex(product) ? product.imageHover : product.image"
+                            [alt]="product.name" class="product-image"
+                            [class.zoomed]="hoveredCard() === getOriginalIndex(product)" />
+
+                        <!-- Quick View Overlay -->
+                        <div class="quick-view-overlay" [class.visible]="hoveredCard() === getOriginalIndex(product)">
+                            <div class="quick-view-content glass">
+                                <h4 class="quick-view-title">Quick View</h4>
+                                <p class="quick-view-description">{{ product.description }}</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Wishlist Button -->
+                    <button class="wishlist-btn" [class.active]="favoritesService.isFavorite(product.id)"
+                        aria-label="Add to wishlist" (click)="toggleFavorite($event, product)">
+                        <svg viewBox="0 0 24 24"
+                            [attr.fill]="favoritesService.isFavorite(product.id) ? '#ef4444' : 'none'"
+                            stroke="currentColor">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+                                stroke-width="1.5" />
+                        </svg>
+                    </button>
+
+                    <!-- Badge -->
+                    <span class="product-badge">New</span>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <span class="product-category">{{ product.category }}</span>
+                    <h3 [routerLink]="['/products', product.id]" class="product-name">{{ product.name }}</h3>
+                    <p class="product-price">
+                        <span class="currency">$</span>{{ product.price.toLocaleString() }}
+                    </p>
+                </div>
+
+                <!-- Add to Cart Button -->
+                <button class="add-to-cart-btn" [class.success]="addedToCart()[getOriginalIndex(product)]"
+                    [class.visible]="hoveredCard() === getOriginalIndex(product)"
+                    (click)="addToCart(product, getOriginalIndex(product), $event)"
+                    [disabled]="addedToCart()[getOriginalIndex(product)]">
+                    @if (addedToCart()[getOriginalIndex(product)]) {
+                    <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>Added!</span>
+                    } @else {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-width="1.5" />
+                        <line x1="3" y1="6" x2="21" y2="6" stroke-width="1.5" />
+                        <path d="M16 10a4 4 0 01-8 0" stroke-width="1.5" />
+                    </svg>
+                    <span>Add to Cart</span>
+                    }
+                </button>
+            </article>
+            }
+
+        </div>
+
+        <!-- View All Button -->
+        <div class="view-all-container">
+            <a routerLink="/products" class="view-all-btn">
+                <span>View All Products</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>

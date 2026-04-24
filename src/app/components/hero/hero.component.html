@@ -1,0 +1,59 @@
+<section class="hero" [style.--scroll-y.px]="scrollY()">
+    <div class="hero-content">
+        <div class="hero-text animate-fade-in-up">
+            <span class="hero-eyebrow">Spring Collection 2026</span>
+            <h1 class="hero-title text-balance">
+                Timeless Elegance,<br />
+                Modern Luxury
+            </h1>
+            <p class="hero-description">
+                Discover our curated collection of premium fashion pieces,
+                crafted with exceptional materials and meticulous attention to detail.
+            </p>
+            <div class="hero-cta">
+                <a routerLink="/products" class="cta-primary">
+                    Explore Collection
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </a>
+                <a routerLink="/products" class="cta-secondary">View Lookbook</a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <!-- Floating product elements -->
+            <div class="floating-product fp-1 animate-float" style="animation-delay: 0s">
+                <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=300&h=400&fit=crop"
+                    alt="Luxury blazer" />
+            </div>
+            <div class="floating-product fp-2 animate-float" style="animation-delay: 1s">
+                <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=250&h=300&fit=crop"
+                    alt="Designer bag" />
+            </div>
+            <div class="floating-product fp-3 animate-float" style="animation-delay: 2s">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop"
+                    alt="Luxury watch" />
+            </div>
+
+            <!-- Decorative elements -->
+            <div class="hero-circle circle-1"></div>
+            <div class="hero-circle circle-2"></div>
+            <div class="hero-line line-1"></div>
+            <div class="hero-line line-2"></div>
+        </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator animate-bounce">
+        <span>Scroll to Explore</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 5v14M5 12l7 7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </div>
+
+    <!-- Background parallax -->
+    <div class="hero-bg" [style.transform]="'translateY(' + (scrollY() * 0.3) + 'px)'">
+    </div>
+</section>

@@ -1,0 +1,303 @@
+<div class="checkout-page">
+    <div class="checkout-container">
+        <!-- Left: Form Steps -->
+        <div class="checkout-form">
+            <a routerLink="/" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M19 12H5M12 19l-7-7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Back to Shopping
+            </a>
+
+            <h1 class="checkout-title">Checkout</h1>
+
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                @for (step of steps; track step.id; let i = $index) {
+                <div class="step" [class.active]="currentStep() === step.id"
+                    [class.completed]="isStepCompleted(step.id)">
+                    <div class="step-number">
+                        @if (isStepCompleted(step.id)) {
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        } @else {
+                        {{ i + 1 }}
+                        }
+                    </div>
+                    <span class="step-label">{{ step.label }}</span>
+                </div>
+                @if (i < steps.length - 1) { <div class="step-connector" [class.active]="isStepCompleted(step.id)">
+            </div>
+            }
+            }
+        </div>
+
+        <!-- Shipping Step -->
+        @if (currentStep() === 'shipping') {
+        <form class="form-section animate-fade-in" (ngSubmit)="goToPayment()">
+            <h2 class="form-title">Shipping Information</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" id="firstName" class="form-input" [(ngModel)]="shippingForm.firstName"
+                        name="firstName" required />
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" id="lastName" class="form-input" [(ngModel)]="shippingForm.lastName"
+                        name="lastName" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" [(ngModel)]="shippingForm.email" name="email"
+                        required />
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" id="phone" class="form-input" [(ngModel)]="shippingForm.phone" name="phone"
+                        required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" id="address" class="form-input" [(ngModel)]="shippingForm.address" name="address"
+                    required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" id="city" class="form-input" [(ngModel)]="shippingForm.city" name="city"
+                        required />
+                </div>
+                <div class="form-group">
+                    <label for="state" class="form-label">State</label>
+                    <input type="text" id="state" class="form-input" [(ngModel)]="shippingForm.state" name="state"
+                        required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="zipCode" class="form-label">ZIP Code</label>
+                    <input type="text" id="zipCode" class="form-input" [(ngModel)]="shippingForm.zipCode" name="zipCode"
+                        required />
+                </div>
+                <div class="form-group">
+                    <label for="country" class="form-label">Country</label>
+                    <select id="country" class="form-input" [(ngModel)]="shippingForm.country" name="country" required>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    Continue to Payment
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </form>
+        }
+
+        <!-- Payment Step -->
+        @if (currentStep() === 'payment') {
+        <form class="form-section animate-fade-in" (ngSubmit)="goToReview()">
+            <h2 class="form-title">Payment Details</h2>
+
+            <div class="payment-methods">
+                <label class="payment-method active">
+                    <input type="radio" name="method" value="card" checked />
+                    <span class="method-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <rect x="1" y="4" width="22" height="16" rx="2" stroke-width="1.5" />
+                            <line x1="1" y1="10" x2="23" y2="10" stroke-width="1.5" />
+                        </svg>
+                    </span>
+                    <span>Credit Card</span>
+                </label>
+                <label class="payment-method">
+                    <input type="radio" name="method" value="paypal" />
+                    <span class="method-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M7.076 21.337H2.47a.641.641 0 01-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106z" />
+                        </svg>
+                    </span>
+                    <span>PayPal</span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="cardName" class="form-label">Name on Card</label>
+                <input type="text" id="cardName" class="form-input" [(ngModel)]="paymentForm.cardName" name="cardName"
+                    required />
+            </div>
+
+            <div class="form-group">
+                <label for="cardNumber" class="form-label">Card Number</label>
+                <input type="text" id="cardNumber" class="form-input" [(ngModel)]="paymentForm.cardNumber"
+                    name="cardNumber" placeholder="1234 5678 9012 3456" required />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="expiry" class="form-label">Expiry Date</label>
+                    <input type="text" id="expiry" class="form-input" [(ngModel)]="paymentForm.expiry" name="expiry"
+                        placeholder="MM/YY" required />
+                </div>
+                <div class="form-group">
+                    <label for="cvv" class="form-label">CVV</label>
+                    <input type="text" id="cvv" class="form-input" [(ngModel)]="paymentForm.cvv" name="cvv"
+                        placeholder="123" required />
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="goToShipping()">
+                    Back
+                </button>
+                <button type="submit" class="btn-primary">
+                    Review Order
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </form>
+        }
+
+        <!-- Review Step -->
+        @if (currentStep() === 'review') {
+        <div class="form-section animate-fade-in">
+            <h2 class="form-title">Review Order</h2>
+
+            <div class="review-section">
+                <div class="review-header">
+                    <h3 class="review-subtitle">Shipping Address</h3>
+                    <button class="edit-btn" (click)="goToShipping()">Edit</button>
+                </div>
+                <p class="review-text">
+                    {{ shippingForm.firstName }} {{ shippingForm.lastName }}<br />
+                    {{ shippingForm.address }}<br />
+                    {{ shippingForm.city }}, {{ shippingForm.state }} {{ shippingForm.zipCode }}<br />
+                    {{ shippingForm.email }}
+                </p>
+            </div>
+
+            <div class="review-section">
+                <div class="review-header">
+                    <h3 class="review-subtitle">Payment Method</h3>
+                    <button class="edit-btn" (click)="goToPayment()">Edit</button>
+                </div>
+                <p class="review-text">
+                    {{ paymentForm.cardName }}<br />
+                    Card ending in {{ paymentForm.cardNumber.slice(-4) }}
+                </p>
+            </div>
+
+            <div class="review-section">
+                <h3 class="review-subtitle">Order Items</h3>
+                <ul class="review-items">
+                    @for (item of cartService.items(); track item.product.id) {
+                    <li class="review-item">
+                        <img [src]="item.product.image" [alt]="item.product.name" />
+                        <div class="review-item-info">
+                            <span class="review-item-name">{{ item.product.name }}</span>
+                            <span class="review-item-qty">Qty: {{ item.quantity }}</span>
+                        </div>
+                        <span class="review-item-price">
+                            {{ formatPrice(item.product.price * item.quantity) }}
+                        </span>
+                    </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="goToPayment()">
+                    Back
+                </button>
+                <button type="button" class="btn-primary btn-gold" (click)="placeOrder()">
+                    Place Order
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Right: Order Summary -->
+    <aside class="order-summary glass">
+        <h2 class="summary-title">Order Summary</h2>
+
+        <ul class="summary-items">
+            @for (item of cartService.items(); track item.product.id) {
+            <li class="summary-item">
+                <div class="summary-item-image">
+                    <img [src]="item.product.image" [alt]="item.product.name" />
+                    <span class="summary-item-qty">{{ item.quantity }}</span>
+                </div>
+                <div class="summary-item-details">
+                    <span class="summary-item-name">{{ item.product.name }}</span>
+                    <span class="summary-item-category">{{ item.product.category }}</span>
+                </div>
+                <span class="summary-item-price">
+                    {{ formatPrice(item.product.price * item.quantity) }}
+                </span>
+            </li>
+            }
+        </ul>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-row">
+            <span>Subtotal</span>
+            <span>{{ formatPrice(cartService.cartTotal()) }}</span>
+        </div>
+        <div class="summary-row">
+            <span>Shipping</span>
+            <span>{{ shipping() === 0 ? 'Free' : formatPrice(shipping()) }}</span>
+        </div>
+        <div class="summary-row">
+            <span>Tax</span>
+            <span>{{ formatPrice(tax()) }}</span>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-row total">
+            <span>Total</span>
+            <span>{{ formatPrice(total()) }}</span>
+        </div>
+
+        <div class="promo-code">
+            <input type="text" placeholder="Promo code" class="promo-input" />
+            <button class="promo-btn">Apply</button>
+        </div>
+
+        <div class="secure-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="3" y="11" width="18" height="11" rx="2" stroke-width="1.5" />
+                <path d="M7 11V7a5 5 0 0110 0v4" stroke-width="1.5" />
+            </svg>
+            <span>Secure checkout powered by Stripe</span>
+        </div>
+    </aside>
+</div>
+</div>

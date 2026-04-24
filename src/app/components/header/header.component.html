@@ -1,0 +1,145 @@
+<header class="header" [class.scrolled]="isScrolled()" [class.menu-open]="isMobileMenuOpen()">
+    <div class="header-container">
+        <!-- Logo -->
+        <a routerLink="/" class="logo">
+            <span class="logo-text">LUXE</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="desktop-nav">
+            @for (item of navItems; track item.label) {
+            @if (item.submenu) {
+            <div class="nav-item" (mouseenter)="openMegaMenu(item.label)" (mouseleave)="closeMegaMenu()">
+                <button class="nav-link">
+                    {{ item.label }}
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+
+                <!-- @if (activeMegaMenu() === item.label) {
+                <div class="mega-menu glass animate-fade-in-down">
+                    <div class="mega-menu-content">
+                        @for (category of item.submenu; track category.title) {
+                        <div class="mega-menu-column">
+                            <h3 class="mega-menu-title">{{ category.title }}</h3>
+                            <ul class="mega-menu-list">
+                                @for (link of category.links; track link) {
+                                <li>
+                                    <a [routerLink]="['/products']" [queryParams]="{category: link}"
+                                        class="mega-menu-link">{{ link }}</a>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                        }
+                        <div class="mega-menu-featured">
+                            <div class="featured-image">
+                                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&h=300&fit=crop"
+                                    alt="Featured collection" />
+                                <div class="featured-overlay">
+                                    <span class="featured-label">New Arrival</span>
+                                    <h4 class="featured-title">Spring Collection</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                } -->
+            </div>
+            } @else {
+            <a [routerLink]="item.link" class="nav-link nav-link-simple">{{ item.label }}</a>
+            }
+            }
+        </nav>
+
+        <!-- Actions -->
+        <div class="header-actions">
+            <a routerLink="/search" class="action-btn" aria-label="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8" stroke-width="2" />
+                    <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </a>
+
+            <button class="action-btn favorites-btn" (click)="favoritesService.toggleFavoritesPanel()"
+                aria-label="Favorites">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+                        stroke-width="2" />
+                </svg>
+                @if (favoritesService.favoritesCount() > 0) {
+                <span class="favorites-badge" [class.pop]="favoritesBadgePop()">
+                    {{ favoritesService.favoritesCount() }}
+                </span>
+                }
+            </button>
+
+            <a routerLink="/account" class="action-btn" aria-label="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="8" r="4" stroke-width="2" />
+                    <path d="M20 21a8 8 0 10-16 0" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </a>
+
+            <button class="cart-btn" (click)="cartService.toggleCart()" aria-label="Shopping cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-width="2" />
+                    <line x1="3" y1="6" x2="21" y2="6" stroke-width="2" />
+                    <path d="M16 10a4 4 0 01-8 0" stroke-width="2" />
+                </svg>
+                @if (cartService.cartCount() > 0) {
+                <span class="cart-badge" [class.pop]="cartBadgePop()">
+                    {{ cartService.cartCount() }}
+                </span>
+                }
+            </button>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+                <span class="hamburger" [class.active]="isMobileMenuOpen()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    @if (isMobileMenuOpen()) {
+    <nav class="mobile-nav glass animate-fade-in">
+        @for (item of navItems; track item.label) {
+        <div class="mobile-nav-item">
+            @if (item.submenu) {
+            <button class="mobile-nav-link" (click)="toggleMobileSubmenu(item.label)">
+                {{ item.label }}
+                <svg class="chevron" [class.rotated]="activeMobileSubmenu() === item.label" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+
+            <!-- @if (activeMobileSubmenu() === item.label) {
+            <div class="mobile-submenu animate-fade-in-down">
+                @for (category of item.submenu; track category.title) {
+                <div class="mobile-submenu-section">
+                    <h4 class="mobile-submenu-title">{{ category.title }}</h4>
+                    @for (link of category.links; track link) {
+                    <a [routerLink]="['/products']" [queryParams]="{category: link}" class="mobile-submenu-link"
+                        (click)="isMobileMenuOpen.set(false)">{{ link }}</a>
+                    }
+                </div>
+                }
+            </div>
+            } -->
+            } @else {
+            <a [routerLink]="item.link" class="mobile-nav-link" (click)="isMobileMenuOpen.set(false)">{{ item.label
+                }}</a>
+            }
+        </div>
+        }
+    </nav>
+    }
+</header>

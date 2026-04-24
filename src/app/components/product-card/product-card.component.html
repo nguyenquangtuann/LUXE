@@ -1,0 +1,45 @@
+<article class="product-card" (mouseenter)="isHovered.set(true)" (mouseleave)="isHovered.set(false)">
+    <div class="product-image">
+        <img [src]="isHovered() ? product.imageHover : product.image" [alt]="product.name" class="primary-image" />
+
+        <div class="product-overlay" [class.visible]="isHovered()">
+            <button class="quick-view-btn glass" aria-label="Quick view">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke-width="1.5" />
+                    <circle cx="12" cy="12" r="3" stroke-width="1.5" />
+                </svg>
+                Quick View
+            </button>
+        </div>
+
+        <button class="add-to-cart-btn" [class.visible]="isHovered()" (click)="addToCart($event)"
+            aria-label="Add to cart">
+            <span class="btn-text">Add to Cart</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-width="1.5" />
+                <line x1="3" y1="6" x2="21" y2="6" stroke-width="1.5" />
+                <path d="M16 10a4 4 0 01-8 0" stroke-width="1.5" />
+            </svg>
+        </button>
+
+        <div class="product-badges">
+            @if (isNew) {
+            <span class="badge badge-new">New</span>
+            }
+        </div>
+
+        <button class="wishlist-btn" aria-label="Add to wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+                    stroke-width="1.5" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="product-info">
+        <span class="product-category">{{ product.category }}</span>
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-price">{{ formatPrice(product.price) }}</p>
+    </div>
+</article>

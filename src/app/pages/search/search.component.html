@@ -1,0 +1,120 @@
+<app-header />
+<app-cart-sidebar />
+
+<main class="search-page">
+    <div class="search-container">
+        <!-- Search Header -->
+        <div class="search-header">
+            <h1 class="page-title">Search Products</h1>
+
+            <div class="search-input-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8" stroke-width="2" />
+                    <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <input type="text" class="search-input" placeholder="Search for products..." [ngModel]="searchQuery()"
+                    (ngModelChange)="onSearchChange($event)" (keyup.enter)="performSearch()" />
+                @if (searchQuery()) {
+                <button class="clear-btn" (click)="clearSearch()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round" />
+                        <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+                }
+            </div>
+
+            @if (searchQuery()) {
+            <p class="search-results-info">
+                Found {{ searchResults().length }} result(s) for "{{ searchQuery() }}"
+            </p>
+            }
+        </div>
+
+        <!-- Search Results -->
+        @if (searchResults().length > 0) {
+        <div class="products-grid">
+            @for (product of searchResults(); track product.id) {
+            <article class="product-card" (mouseenter)="hoveredProduct.set(product.id)"
+                (mouseleave)="hoveredProduct.set(null)">
+
+                <a [routerLink]="['/products', product.id]" class="image-container">
+                    <img [src]="hoveredProduct() === product.id ? product.imageHover : product.image"
+                        [alt]="product.name" class="product-image" [class.zoomed]="hoveredProduct() === product.id" />
+
+                    <button class="wishlist-btn" aria-label="Add to wishlist"
+                        (click)="$event.preventDefault(); $event.stopPropagation()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+                                stroke-width="1.5" />
+                        </svg>
+                    </button>
+                </a>
+
+                <div class="product-info">
+                    <span class="product-category">{{ product.category }}</span>
+                    <a [routerLink]="['/products', product.id]" class="product-name">{{ product.name }}</a>
+                    <p class="product-price">
+                        <span class="currency">$</span>{{ product.price.toLocaleString() }}
+                    </p>
+                </div>
+
+                <button class="add-to-cart-btn" [class.success]="addedToCart()[product.id]"
+                    (click)="addToCart(product)">
+                    @if (addedToCart()[product.id]) {
+                    <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>Added!</span>
+                    } @else {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-width="1.5" />
+                        <line x1="3" y1="6" x2="21" y2="6" stroke-width="1.5" />
+                        <path d="M16 10a4 4 0 01-8 0" stroke-width="1.5" />
+                    </svg>
+                    <span>Add to Cart</span>
+                    }
+                </button>
+            </article>
+            }
+        </div>
+        } @else if (searchQuery()) {
+        <div class="no-results">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8" stroke-width="2" />
+                <path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <h3>No products found</h3>
+            <p>Try searching with different keywords</p>
+        </div>
+        } @else {
+        <!-- Popular Searches -->
+        <div class="popular-searches">
+            <h3>Popular Searches</h3>
+            <div class="search-tags">
+                @for (tag of popularSearches; track tag) {
+                <button class="search-tag" (click)="searchByTag(tag)">
+                    {{ tag }}
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- Browse Categories -->
+        <div class="browse-categories">
+            <h3>Browse by Category</h3>
+            <div class="category-grid">
+                @for (category of categories; track category.name) {
+                <a [routerLink]="['/products']" [queryParams]="{ category: category.name }" class="category-card">
+                    <img [src]="category.image" [alt]="category.name" />
+                    <span class="category-name">{{ category.name }}</span>
+                </a>
+                }
+            </div>
+        </div>
+        }
+    </div>
+</main>
+
+<app-footer />

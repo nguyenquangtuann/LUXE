@@ -1,0 +1,56 @@
+<section id="products" class="products-section">
+    <div class="section-container">
+        <header class="section-header animate-fade-in-up">
+            <span class="section-eyebrow">Curated Selection</span>
+            <h2 class="section-title">Featured Products</h2>
+            <p class="section-description">
+                Explore our handpicked collection of premium pieces,
+                each crafted to perfection.
+            </p>
+        </header>
+
+        <div class="filter-bar glass">
+            <div class="filter-tabs">
+                @for (category of categories; track category) {
+                <button class="filter-tab" [class.active]="activeCategory() === category"
+                    (click)="setCategory(category)">
+                    {{ category }}
+                </button>
+                }
+            </div>
+
+            <div class="filter-sort">
+                <label for="sort" class="sr-only">Sort by</label>
+                <select id="sort" class="sort-select" (change)="onSortChange($event)">
+                    <option value="featured">Featured</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="name">Name: A-Z</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="products-grid">
+            @for (product of filteredProducts(); track product.id; let i = $index) {
+            <div class="product-item" [class.visible]="isVisible()" [style.animation-delay.ms]="i * 100">
+                <app-product-card [product]="product" [isNew]="i < 2" />
+            </div>
+            }
+        </div>
+
+        @if (filteredProducts().length === 0) {
+        <div class="empty-state">
+            <p>No products found in this category.</p>
+        </div>
+        }
+
+        <div class="load-more">
+            <button class="load-more-btn">
+                View All Products
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</section>
