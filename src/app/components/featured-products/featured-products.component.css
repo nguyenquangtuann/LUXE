@@ -382,11 +382,48 @@
     .product-card.mobile-active .add-to-cart-btn {
         opacity: 1;
         transform: translateY(0);
-        /* Chuyển màu vàng để gây chú ý */
     }
 
-    /* Đảm bảo overlay trên mobile không quá đậm gây khó nhìn */
-    /* .product-card.mobile-active .quick-view-overlay {
-        background: rgba(26, 26, 46, 0.2);
-    } */
+    .quick-view-overlay {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: auto;
+        padding: var(--space-md);
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .quick-view-content.glass {
+        /* Hiệu ứng kính mờ mịn hơn */
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 100%;
+        padding: var(--space-sm) var(--space-md);
+        margin: 0;
+        text-align: left;
+    }
+
+    .quick-view-title {
+        font-size: 0.75rem;
+        color: var(--color-white);
+        margin-bottom: 2px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .quick-view-description {
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.8);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        /* Giới hạn tối đa 2 dòng mô tả */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.3;
+    }
 }
