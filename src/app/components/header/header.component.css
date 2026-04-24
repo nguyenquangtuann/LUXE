@@ -361,9 +361,9 @@
     }
 }
 
-.mobile-nav-item {
+/* .mobile-nav-item {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
+} */
 
 .mobile-nav-item:last-child {
     border-bottom: none;
