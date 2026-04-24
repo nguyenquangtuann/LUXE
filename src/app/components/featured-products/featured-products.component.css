@@ -85,6 +85,30 @@
         padding: var(--space-xs) var(--space-md);
         font-size: 0.75rem;
     }
+
+    .quick-view-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-lg);
+        background: rgba(26, 26, 46, 0.4);
+        opacity: 0;
+        transition: opacity var(--transition-base);
+    }
+
+    .quick-view-content {
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        text-align: center;
+        transform: translateY(20px);
+        transition: transform var(--transition-base);
+    }
+
+    .quick-view-overlay.visible .quick-view-content {
+        transform: translateY(0);
+    }
 }
 
 /* Product Grid - Responsive Tailwind-like grid */
@@ -98,11 +122,59 @@
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .quick-view-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-lg);
+        background: rgba(26, 26, 46, 0.4);
+        opacity: 0;
+        transition: opacity var(--transition-base);
+    }
+
+    .quick-view-content {
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        text-align: center;
+        transform: translateY(20px);
+        transition: transform var(--transition-base);
+    }
+
+    .quick-view-overlay.visible .quick-view-content {
+        transform: translateY(0);
+    }
 }
 
 @media (min-width: 1024px) {
     .products-grid {
         grid-template-columns: repeat(4, 1fr);
+    }
+
+    .quick-view-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-lg);
+        background: rgba(26, 26, 46, 0.4);
+        opacity: 0;
+        transition: opacity var(--transition-base);
+    }
+
+    .quick-view-content {
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        text-align: center;
+        transform: translateY(20px);
+        transition: transform var(--transition-base);
+    }
+
+    .quick-view-overlay.visible .quick-view-content {
+        transform: translateY(0);
     }
 }
 
@@ -394,6 +466,14 @@
         background: rgba(26, 26, 46, 0.4);
         opacity: 0;
         transition: opacity var(--transition-base);
+    }
+
+    .quick-view-content {
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        text-align: center;
+        transform: translateY(20px);
+        transition: transform var(--transition-base);
     }
 
     .quick-view-overlay.visible .quick-view-content {
