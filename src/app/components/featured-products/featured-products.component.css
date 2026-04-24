@@ -382,7 +382,7 @@
     .product-card.mobile-active .add-to-cart-btn {
         opacity: 1;
         transform: translateY(0);
-        background: var(--color-gold);
+        /* background: var(--color-gold); */
         /* Chuyển màu vàng để gây chú ý */
     }
 
