@@ -366,3 +366,28 @@
 .view-all-btn:hover svg {
     transform: translateX(4px);
 }
+
+@media (max-width: 768px) {
+
+    /* Khi card được cuộn tới (mobile-active) */
+    .product-card.mobile-active {
+        z-index: 2;
+    }
+
+    .product-card.mobile-active .product-image {
+        transform: scale(1.05);
+        /* Zoom nhẹ ảnh khi lướt tới */
+    }
+
+    .product-card.mobile-active .add-to-cart-btn {
+        opacity: 1;
+        transform: translateY(0);
+        background: var(--color-gold);
+        /* Chuyển màu vàng để gây chú ý */
+    }
+
+    /* Đảm bảo overlay trên mobile không quá đậm gây khó nhìn */
+    .product-card.mobile-active .quick-view-overlay {
+        background: rgba(26, 26, 46, 0.2);
+    }
+}

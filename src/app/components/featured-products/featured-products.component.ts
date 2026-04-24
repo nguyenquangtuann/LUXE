@@ -17,6 +17,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewInit, OnDestr
   private productsService = inject(ProductsService);
   cartService = inject(CartService);
   favoritesService = inject(FavoritesService);
+  mobileFocusedCard = signal<number | null>(null);
 
   hoveredCard = signal<number | null>(null);
   addedToCart = signal<boolean[]>([]);
@@ -106,6 +107,11 @@ export class FeaturedProductsComponent implements OnInit, AfterViewInit, OnDestr
       const updated = [...current];
       updated[index] = true;
       this.visibleCards.set(updated);
+    }
+
+    //Nếu là mobile, set card này làm card được focus
+    if (window.innerWidth <= 768) {
+      this.mobileFocusedCard.set(index);
     }
   }
 

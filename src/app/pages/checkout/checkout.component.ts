@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 
@@ -34,7 +34,7 @@ interface PaymentForm {
 })
 export class CheckoutComponent {
   cartService = inject(CartService);
-
+  private router = inject(Router);
   currentStep = signal<CheckoutStep>('shipping');
 
   steps = [
@@ -96,6 +96,7 @@ export class CheckoutComponent {
   placeOrder() {
     alert('Order placed successfully! Thank you for your purchase.');
     this.cartService.clearCart();
+    this.router.navigate(['/']);
   }
 
   formatPrice(price: number): string {

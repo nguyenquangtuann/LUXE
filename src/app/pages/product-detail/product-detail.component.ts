@@ -18,7 +18,6 @@ import { FavoritesService } from '../../services/favorites.service';
 export class ProductDetailComponent implements OnInit {
   private productsService = inject(ProductsService);
   private cartService = inject(CartService);
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   favoritesService = inject(FavoritesService);
 
