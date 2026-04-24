@@ -17,7 +17,7 @@ export class FeaturedProductsComponent implements OnInit, AfterViewInit, OnDestr
   private productsService = inject(ProductsService);
   cartService = inject(CartService);
   favoritesService = inject(FavoritesService);
-  mobileFocusedCard = signal<number | null>(null);
+  mobileFocusedCards = signal<number[]>([]);
 
   hoveredCard = signal<number | null>(null);
   addedToCart = signal<boolean[]>([]);
@@ -64,19 +64,38 @@ export class FeaturedProductsComponent implements OnInit, AfterViewInit, OnDestr
 
     // Initialize intersection observer for scroll animations
     if (typeof IntersectionObserver !== 'undefined') {
+      // this.observer = new IntersectionObserver(
+      //   (entries) => {
+      //     entries.forEach((entry) => {
+      //       if (entry.isIntersecting) {
+      //         const index = parseInt(entry.target.getAttribute('data-index') || '0', 10);
+      //         this.setCardVisible(index);
+      //       }
+      //     });
+      //   },
+      //   {
+      //     threshold: 0.1,
+      //     rootMargin: '0px 0px -50px 0px'
+      //   }
+      // );
       this.observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0', 10);
+
             if (entry.isIntersecting) {
-              const index = parseInt(entry.target.getAttribute('data-index') || '0', 10);
               this.setCardVisible(index);
+            } else {
+              // Khi card đi ra ngoài màn hình, xóa nó khỏi danh sách focused
+              if (window.innerWidth <= 1024) {
+                this.mobileFocusedCards.set(
+                  this.mobileFocusedCards().filter(i => i !== index)
+                );
+              }
             }
           });
         },
-        {
-          threshold: 0.1,
-          rootMargin: '0px 0px -50px 0px'
-        }
+        { threshold: 0.3 }
       );
     }
   }
@@ -102,16 +121,19 @@ export class FeaturedProductsComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   private setCardVisible(index: number) {
-    const current = this.visibleCards();
-    if (!current[index]) {
-      const updated = [...current];
+    const currentVisible = this.visibleCards();
+    if (!currentVisible[index]) {
+      const updated = [...currentVisible];
       updated[index] = true;
       this.visibleCards.set(updated);
     }
 
-    //Nếu là mobile, set card này làm card được focus
-    if (window.innerWidth <= 768) {
-      this.mobileFocusedCard.set(index);
+    if (window.innerWidth <= 1024) {
+      const currentFocused = this.mobileFocusedCards();
+      if (!currentFocused.includes(index)) {
+        // Thêm index vào mảng nếu chưa có
+        this.mobileFocusedCards.set([...currentFocused, index]);
+      }
     }
   }
 

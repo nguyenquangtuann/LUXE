@@ -23,7 +23,7 @@
         <div class="products-grid">
             @for (product of filteredProducts; track product.id; let i = $index) {
             <article #productCard class="product-card" [class.visible]="visibleCards()[getOriginalIndex(product)]"
-                [class.mobile-active]="mobileFocusedCard() === getOriginalIndex(product)"
+                [class.mobile-active]="mobileFocusedCards().includes(getOriginalIndex(product))"
                 [style.--stagger-delay]="(i * 100) + 'ms'" (mouseenter)="onCardHover(getOriginalIndex(product), true)"
                 (mouseleave)="onCardHover(getOriginalIndex(product), false)">
 
@@ -36,7 +36,7 @@
 
                         <!-- Quick View Overlay -->
                         <div class="quick-view-overlay"
-                            [class.visible]="hoveredCard() === getOriginalIndex(product) || mobileFocusedCard() === getOriginalIndex(product)">
+                            [class.visible]="hoveredCard() === getOriginalIndex(product) || mobileFocusedCards().includes(getOriginalIndex(product))">
                             <div class="quick-view-content glass">
                                 <h4 class="quick-view-title">Quick View</h4>
                                 <p class="quick-view-description">{{ product.description }}</p>
@@ -71,7 +71,7 @@
 
                 <!-- Add to Cart Button -->
                 <button class="add-to-cart-btn" [class.success]="addedToCart()[getOriginalIndex(product)]"
-                    [class.visible]="hoveredCard() === getOriginalIndex(product) || mobileFocusedCard() === getOriginalIndex(product)"
+                    [class.visible]="hoveredCard() === getOriginalIndex(product) || mobileFocusedCards().includes(getOriginalIndex(product))"
                     (click)="addToCart(product, getOriginalIndex(product), $event)"
                     [disabled]="addedToCart()[getOriginalIndex(product)]">
                     @if (addedToCart()[getOriginalIndex(product)]) {

@@ -85,10 +85,6 @@
         padding: var(--space-xs) var(--space-md);
         font-size: 0.75rem;
     }
-
-    .quick-view-overlay {
-        visibility: hidden;
-    }
 }
 
 /* Product Grid - Responsive Tailwind-like grid */
@@ -102,19 +98,11 @@
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-
-    .quick-view-overlay {
-        visibility: hidden;
-    }
 }
 
 @media (min-width: 1024px) {
     .products-grid {
         grid-template-columns: repeat(4, 1fr);
-    }
-
-    .quick-view-overlay {
-        visibility: hidden;
     }
 }
 
@@ -379,9 +367,7 @@
     transform: translateX(4px);
 }
 
-@media (max-width: 768px) {
-
-    /* Khi card được cuộn tới (mobile-active) */
+@media (max-width: 1024px) {
     .product-card.mobile-active {
         z-index: 2;
     }
