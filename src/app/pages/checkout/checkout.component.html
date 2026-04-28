@@ -38,28 +38,21 @@
         <form class="form-section animate-fade-in" (ngSubmit)="goToPayment()">
             <h2 class="form-title">Shipping Information</h2>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="firstName" class="form-label">First Name</label>
-                    <input type="text" id="firstName" class="form-input" [(ngModel)]="shippingForm.firstName"
-                        name="firstName" required />
-                </div>
-                <div class="form-group">
-                    <label for="lastName" class="form-label">Last Name</label>
-                    <input type="text" id="lastName" class="form-input" [(ngModel)]="shippingForm.lastName"
-                        name="lastName" required />
-                </div>
+            <div class="form-group">
+                <label for="fullName" class="form-label">Full Name</label>
+                <input type="text" id="fullName" class="form-input" [(ngModel)]="shippingForm.fullName" name="fullName"
+                    required />
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" class="form-input" [(ngModel)]="shippingForm.email" name="email"
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" id="phone" class="form-input" [(ngModel)]="shippingForm.phone" name="phone"
                         required />
                 </div>
                 <div class="form-group">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="tel" id="phone" class="form-input" [(ngModel)]="shippingForm.phone" name="phone"
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" [(ngModel)]="shippingForm.email" name="email"
                         required />
                 </div>
             </div>
@@ -161,10 +154,10 @@
                     <button class="edit-btn" (click)="goToShipping()">Edit</button>
                 </div>
                 <p class="review-text">
-                    {{ shippingForm.firstName }} {{ shippingForm.lastName }}<br />
-                    {{ shippingForm.address }}<br />
-                    {{ shippingForm.city }}, {{ shippingForm.state }} {{ shippingForm.zipCode }}<br />
-                    {{ shippingForm.email }}
+                    {{ shippingForm.fullName }}<br />
+                    {{ shippingForm.phone }}<br />
+                    {{ shippingForm.email }}<br />
+                    {{ shippingForm.address }}
                 </p>
             </div>
 
@@ -179,7 +172,7 @@
                 </p>
             </div>
 
-            <div class="review-section">
+            <!-- <div class="review-section">
                 <h3 class="review-subtitle">Order Items</h3>
                 <ul class="review-items">
                     @for (item of cartService.items(); track item.product.id + item.product.size) {
@@ -196,7 +189,7 @@
                     </li>
                     }
                 </ul>
-            </div>
+            </div> -->
 
             <div class="form-actions">
                 <button type="button" class="btn-secondary" (click)="goToPayment()">

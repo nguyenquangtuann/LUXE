@@ -7,15 +7,10 @@ import { CartService } from '../../services/cart.service';
 type CheckoutStep = 'shipping' | 'payment' | 'review';
 
 interface ShippingForm {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   phone: string;
   address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
 }
 
 interface PaymentForm {
@@ -44,15 +39,10 @@ export class CheckoutComponent {
   ];
 
   shippingForm: ShippingForm = {
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
     phone: '',
     address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: 'US'
   };
 
   paymentForm: PaymentForm = {
