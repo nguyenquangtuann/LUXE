@@ -28,20 +28,22 @@
         </div>
         } @else {
         <ul class="cart-items">
-            @for (item of cartService.items(); track item.product.id; let i = $index) {
+            @for (item of cartService.items(); track item.product.id + item.product.size; let i = $index) {
             <li class="cart-item animate-fade-in-up" [style.animation-delay.ms]="i * 50">
                 <div class="item-image">
                     <img [src]="item.product.image" [alt]="item.product.name" />
                 </div>
                 <div class="item-details">
-                    <h3 class="item-name">{{ item.product.name }}</h3>
+                    <h3 class="item-name">
+                        {{ item.product.name }}{{ item.product.size ? ' - Size: ' + item.product.size : '' }}
+                    </h3>
                     <p class="item-category">{{ item.product.category }}</p>
                     <p class="item-price">{{ formatPrice(item.product.price) }}</p>
 
                     <div class="item-actions">
                         <div class="quantity-control">
                             <button class="qty-btn"
-                                (click)="cartService.updateQuantity(item.product.id, item.quantity - 1)"
+                                (click)="cartService.updateQuantity(item.product.id, item.product.size, item.quantity - 1)"
                                 aria-label="Decrease quantity">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M5 12h14" stroke-width="2" stroke-linecap="round" />
@@ -49,7 +51,7 @@
                             </button>
                             <span class="qty-value">{{ item.quantity }}</span>
                             <button class="qty-btn"
-                                (click)="cartService.updateQuantity(item.product.id, item.quantity + 1)"
+                                (click)="cartService.updateQuantity(item.product.id, item.product.size, item.quantity + 1)"
                                 aria-label="Increase quantity">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round" />
@@ -57,7 +59,7 @@
                             </button>
                         </div>
 
-                        <button class="remove-btn" (click)="cartService.removeFromCart(item.product.id)"
+                        <button class="remove-btn" (click)="cartService.removeFromCart(item.product.id, item.product.size)"
                             aria-label="Remove item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <path

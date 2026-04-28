@@ -14,7 +14,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=800&fit=crop',
       category: 'Outerwear',
       description: 'Luxurious silk-blend blazer with refined tailoring',
-      new: true
+      new: true,
+      size: ''
     },
     {
       id: 2,
@@ -24,7 +25,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&h=800&fit=crop',
       category: 'Accessories',
       description: 'Handcrafted Italian leather with gold hardware',
-      new: true
+      new: true,
+      size: ''
     },
     {
       id: 3,
@@ -34,7 +36,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=600&h=800&fit=crop',
       category: 'Accessories',
       description: 'Pure Mongolian cashmere in timeless design',
-      new: false
+      new: false,
+      size: ''
     },
     {
       id: 4,
@@ -44,7 +47,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&h=800&fit=crop',
       category: 'Watches',
       description: 'Swiss movement with 18k gold accents',
-      new: true
+      new: true,
+      size: ''
     },
     {
       id: 5,
@@ -54,7 +58,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&h=800&fit=crop',
       category: 'Dresses',
       description: 'Hand-sewn velvet with subtle shimmer finish',
-      new: false
+      new: false,
+      size: ''
     },
     {
       id: 6,
@@ -64,7 +69,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1560343090-f0409e92791a?w=600&h=800&fit=crop',
       category: 'Footwear',
       description: 'Italian craftsmanship with comfort insoles',
-      new: false
+      new: false,
+      size: ''
     },
     {
       id: 7,
@@ -74,7 +80,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&h=800&fit=crop',
       category: 'Jewelry',
       description: 'Ethically sourced diamonds in platinum setting',
-      new: true
+      new: true,
+      size: ''
     },
     {
       id: 8,
@@ -84,7 +91,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=800&fit=crop',
       category: 'Knitwear',
       description: 'Ultra-fine merino with ribbed detailing',
-      new: true
+      new: true,
+      size: ''
     },
     {
       id: 9,
@@ -94,7 +102,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=800&fit=crop',
       category: 'Outerwear',
       description: 'Double-breasted wool coat with satin lining',
-      new: false
+      new: false,
+      size: ''
     },
     {
       id: 10,
@@ -104,7 +113,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&h=800&fit=crop',
       category: 'Jewelry',
       description: 'Sterling silver chain with pendant',
-      new: false
+      new: false,
+      size: ''
     },
     {
       id: 11,
@@ -114,7 +124,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=800&fit=crop',
       category: 'Accessories',
       description: 'Polarized lenses with titanium frames',
-      new: true
+      new: true,
+      size: ''
     },
     {
       id: 12,
@@ -124,7 +135,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=600&h=800&fit=crop',
       category: 'Footwear',
       description: 'Italian leather with memory foam insoles',
-      new: false
+      new: false,
+      size: ''
     },
     {
       id: 13,
@@ -134,7 +146,8 @@ export class ProductsService {
       imageHover: 'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=600&h=800&fit=crop',
       category: 'Accessories',
       description: 'Italian leather with memory foam insoles',
-      new: true
+      new: true,
+      size: ''
     }
   ]);
 

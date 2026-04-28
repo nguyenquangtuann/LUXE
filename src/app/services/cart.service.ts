@@ -9,6 +9,7 @@ export interface Product {
   category: string;
   description: string;
   new: boolean;
+  size: string;
 }
 
 export interface CartItem {
@@ -36,9 +37,11 @@ export class CartService {
     this.cartItems().reduce((sum, item) => sum + (item.product.price * item.quantity), 0)
   );
 
-  addToCart(product: Product, event?: MouseEvent) {
+  addToCart(product: Product, event?: MouseEvent, quantityToAdd: number = 1) {
     const currentItems = this.cartItems();
-    const existingItem = currentItems.find(item => item.product.id === product.id);
+    const existingItem = currentItems.find(item =>
+      item.product.id === product.id && item.product.size === product.size
+    );
 
     if (event) {
       const rect = (event.target as HTMLElement).getBoundingClientRect();
@@ -56,29 +59,31 @@ export class CartService {
     if (existingItem) {
       this.cartItems.set(
         currentItems.map(item =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+          (item.product.id === product.id && item.product.size === product.size)
+            ? { ...item, quantity: item.quantity + quantityToAdd } // cộng dồn số lượng chọn
             : item
         )
       );
     } else {
-      this.cartItems.set([...currentItems, { product, quantity: 1 }]);
+      this.cartItems.set([...currentItems, { product: { ...product }, quantity: quantityToAdd }]);
     }
   }
 
-  removeFromCart(productId: number) {
-    this.cartItems.update(items => items.filter(item => item.product.id !== productId));
+  removeFromCart(productId: number, size: string) {
+    this.cartItems.update(items =>
+      items.filter(item => !(item.product.id === productId && item.product.size === size))
+    );
   }
 
-  updateQuantity(productId: number, quantity: number) {
+  updateQuantity(productId: number, size: string, quantity: number) {
     if (quantity <= 0) {
-      this.removeFromCart(productId);
+      this.removeFromCart(productId, size);
       return;
     }
 
     this.cartItems.update(items =>
       items.map(item =>
-        item.product.id === productId
+        item.product.id === productId && item.product.size === size
           ? { ...item, quantity }
           : item
       )

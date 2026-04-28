@@ -70,36 +70,6 @@
                     required />
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="city" class="form-label">City</label>
-                    <input type="text" id="city" class="form-input" [(ngModel)]="shippingForm.city" name="city"
-                        required />
-                </div>
-                <div class="form-group">
-                    <label for="state" class="form-label">State</label>
-                    <input type="text" id="state" class="form-input" [(ngModel)]="shippingForm.state" name="state"
-                        required />
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="zipCode" class="form-label">ZIP Code</label>
-                    <input type="text" id="zipCode" class="form-input" [(ngModel)]="shippingForm.zipCode" name="zipCode"
-                        required />
-                </div>
-                <div class="form-group">
-                    <label for="country" class="form-label">Country</label>
-                    <select id="country" class="form-input" [(ngModel)]="shippingForm.country" name="country" required>
-                        <option value="US">United States</option>
-                        <option value="CA">Canada</option>
-                        <option value="UK">United Kingdom</option>
-                        <option value="AU">Australia</option>
-                    </select>
-                </div>
-            </div>
-
             <div class="form-actions">
                 <button type="submit" class="btn-primary">
                     Continue to Payment
@@ -212,12 +182,13 @@
             <div class="review-section">
                 <h3 class="review-subtitle">Order Items</h3>
                 <ul class="review-items">
-                    @for (item of cartService.items(); track item.product.id) {
+                    @for (item of cartService.items(); track item.product.id + item.product.size) {
                     <li class="review-item">
                         <img [src]="item.product.image" [alt]="item.product.name" />
                         <div class="review-item-info">
                             <span class="review-item-name">{{ item.product.name }}</span>
                             <span class="review-item-qty">Qty: {{ item.quantity }}</span>
+                            <span *ngIf="item.product.size" class="review-item-qty">Size: {{ item.product.size }}</span>
                         </div>
                         <span class="review-item-price">
                             {{ formatPrice(item.product.price * item.quantity) }}
@@ -247,7 +218,7 @@
         <h2 class="summary-title">Order Summary</h2>
 
         <ul class="summary-items">
-            @for (item of cartService.items(); track item.product.id) {
+            @for (item of cartService.items(); track item.product.id + item.product.size) {
             <li class="summary-item">
                 <div class="summary-item-image">
                     <img [src]="item.product.image" [alt]="item.product.name" />
@@ -256,6 +227,7 @@
                 <div class="summary-item-details">
                     <span class="summary-item-name">{{ item.product.name }}</span>
                     <span class="summary-item-category">{{ item.product.category }}</span>
+                    <span *ngIf="item.product.size" class="summary-item-category">Size: {{ item.product.size }}</span>
                 </div>
                 <span class="summary-item-price">
                     {{ formatPrice(item.product.price * item.quantity) }}

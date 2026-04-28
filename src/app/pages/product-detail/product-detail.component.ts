@@ -54,9 +54,9 @@ export class ProductDetailComponent implements OnInit {
   addToCart() {
     const prod = this.product();
     if (prod) {
-      for (let i = 0; i < this.quantity(); i++) {
-        this.cartService.addToCart(prod);
-      }
+      const productWithSize = { ...prod, size: this.selectedSize() };
+
+      this.cartService.addToCart(productWithSize, undefined, this.quantity());
       this.addedToCart.set(true);
       setTimeout(() => this.addedToCart.set(false), 2000);
     }
