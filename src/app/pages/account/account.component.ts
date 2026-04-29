@@ -6,7 +6,7 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar.component';
 import { AuthService } from '../../services/auth.service';
-
+declare var google: any;
 @Component({
   selector: 'app-account',
   standalone: true,
@@ -17,7 +17,9 @@ import { AuthService } from '../../services/auth.service';
 export class AccountComponent implements OnInit {
   authService = inject(AuthService);
 
-  @ViewChild('googleBtn', { static: false }) googleBtn!: ElementRef;
+  clientId = '1092586557004-h2cl9706bn9p0jqe2291n690urp41n6g.apps.googleusercontent.com';
+  tokenClient: any;
+
   activeTab = signal<'login' | 'register'>('login');
   isLoading = signal<boolean>(false);
 
@@ -41,22 +43,73 @@ export class AccountComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    (window as any).onGoogleLibraryLoad = () => {
-      (window as any).google.accounts.id.initialize({
-        client_id: '690406882030-1aiqkgg1cuqlcucmh1lahnpspq91ssqe.apps.googleusercontent.com',
-        // Gọi đúng hàm trong AuthService của bạn
-        callback: this.authService.handleCredentialResponse.bind(this.authService)
-      });
+    this.loadGoogleLibrary();
+  }
 
-      // Render nút thật vào cái div tàng hình
-      (window as any).google.accounts.id.renderButton(
-        this.googleBtn.nativeElement,
-        { theme: 'outline', size: 'large', width: 250 }
-      );
-    };
-    if ((window as any).google) {
-      (window as any).onGoogleLibraryLoad();
+  loadGoogleLibrary() {
+    // Nếu script đã có thì khởi tạo luôn
+    if (typeof google !== 'undefined' && google.accounts) {
+      this.initCustomLoginClient();
+      return;
     }
+
+    // Tự động nhúng script GSI vào trang
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+
+    script.onload = () => {
+      this.initCustomLoginClient();
+    };
+
+    document.head.appendChild(script);
+  }
+
+  initCustomLoginClient() {
+    // Khởi tạo luồng OAuth2 cho Custom Button
+    this.tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: this.clientId,
+      scope: 'email profile openid',
+      callback: (response: any) => {
+        if (response.error !== undefined) {
+          console.error('Đăng nhập bị lỗi hoặc bị hủy:', response);
+          return;
+        }
+
+        // Khi đăng nhập thành công, Google trả về access_token
+        // Ta dùng nó để gọi API lấy thông tin User
+        this.fetchUserInfo(response.access_token);
+      }
+    });
+  }
+
+  // Hàm này được gọi khi bạn click vào cái nút Custom của bạn
+  loginWithCustomButton() {
+    if (this.tokenClient) {
+      // Mở Popup chọn tài khoản Google
+      this.tokenClient.requestAccessToken();
+    } else {
+      console.warn('Thư viện Google chưa tải xong, vui lòng đợi...');
+    }
+  }
+
+  // Hàm gọi API để lấy ra Tên, Email, Hình ảnh
+  fetchUserInfo(accessToken: string) {
+    fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+      .then(res => res.json())
+      .then(userInfo => {
+        console.log('--- THÀNH CÔNG! THÔNG TIN USER TỪ NÚT CUSTOM ---');
+        console.log('ID:', userInfo.sub);
+        console.log('Tên:', userInfo.name);
+        console.log('Email:', userInfo.email);
+        console.log('Ảnh đại diện URL:', userInfo.picture);
+
+        // Viết logic đăng nhập vào hệ thống của bạn ở đây...
+      })
+      .catch(err => console.error('Lỗi khi lấy thông tin user:', err));
   }
 
   onLogin() {
