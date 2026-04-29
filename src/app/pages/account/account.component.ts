@@ -19,6 +19,7 @@ export class AccountComponent implements OnInit {
 
   clientId = '1092586557004-h2cl9706bn9p0jqe2291n690urp41n6g.apps.googleusercontent.com';
   tokenClient: any;
+  userProfile: any = null;
 
   activeTab = signal<'login' | 'register'>('login');
   isLoading = signal<boolean>(false);
@@ -101,15 +102,17 @@ export class AccountComponent implements OnInit {
     })
       .then(res => res.json())
       .then(userInfo => {
-        console.log('--- THÀNH CÔNG! THÔNG TIN USER TỪ NÚT CUSTOM ---');
-        console.log('ID:', userInfo.sub);
-        console.log('Tên:', userInfo.name);
-        console.log('Email:', userInfo.email);
-        console.log('Ảnh đại diện URL:', userInfo.picture);
-
-        // Viết logic đăng nhập vào hệ thống của bạn ở đây...
+        this.userProfile = userInfo;
+        localStorage.setItem('user_data', JSON.stringify(userInfo));
+        this.router.navigate(['/']);
       })
       .catch(err => console.error('Lỗi khi lấy thông tin user:', err));
+  }
+
+  logout() {
+    this.userProfile = null;
+    localStorage.removeItem('user_data');
+    google.accounts.oauth2.revoke(localStorage.getItem('token'), () => { });
   }
 
   onLogin() {

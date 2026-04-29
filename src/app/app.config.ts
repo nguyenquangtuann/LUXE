@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
                 scrollPositionRestoration: 'enabled',
                 anchorScrolling: 'enabled'
             }),
-            withViewTransitions(),
+            //withViewTransitions(),
             withPreloading(PreloadAllModules)
         )
     ]
