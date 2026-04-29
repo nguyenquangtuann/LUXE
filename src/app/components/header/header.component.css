@@ -181,10 +181,31 @@
     text-decoration: none;
 }
 
+.action-btn-account {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+    color: var(--color-slate);
+    text-decoration: none;
+}
+
 @media (min-width: 768px) {
     .action-btn {
         display: flex;
     }
+}
+
+.action-btn-account:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.action-btn-account svg {
+    width: 20px;
+    height: 20px;
 }
 
 .action-btn:hover {

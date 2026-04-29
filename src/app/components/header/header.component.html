@@ -76,13 +76,6 @@
                 }
             </button>
 
-            <a routerLink="/account" class="action-btn" aria-label="Account">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <circle cx="12" cy="8" r="4" stroke-width="2" />
-                    <path d="M20 21a8 8 0 10-16 0" stroke-width="2" stroke-linecap="round" />
-                </svg>
-            </a>
-
             <button class="cart-btn" (click)="cartService.toggleCart()" aria-label="Shopping cart">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-width="2" />
@@ -95,6 +88,13 @@
                 </span>
                 }
             </button>
+
+            <a routerLink="/account" class="action-btn-account" aria-label="Account">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="8" r="4" stroke-width="2" />
+                    <path d="M20 21a8 8 0 10-16 0" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </a>
 
             <!-- Mobile Menu Toggle -->
             <button class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
