@@ -64,20 +64,6 @@ export class FeaturedProductsComponent implements OnInit, AfterViewInit, OnDestr
 
     // Initialize intersection observer for scroll animations
     if (typeof IntersectionObserver !== 'undefined') {
-      // this.observer = new IntersectionObserver(
-      //   (entries) => {
-      //     entries.forEach((entry) => {
-      //       if (entry.isIntersecting) {
-      //         const index = parseInt(entry.target.getAttribute('data-index') || '0', 10);
-      //         this.setCardVisible(index);
-      //       }
-      //     });
-      //   },
-      //   {
-      //     threshold: 0.1,
-      //     rootMargin: '0px 0px -50px 0px'
-      //   }
-      // );
       this.observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
