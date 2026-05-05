@@ -85,7 +85,7 @@ export class AccountComponent implements OnInit {
     });
   }
 
-  // Hàm này được gọi khi bạn click vào cái nút Custom của bạn
+  // Hàm này được gọi khi bạn click vào nút
   loginWithCustomButton() {
     if (this.tokenClient) {
       // Mở Popup chọn tài khoản Google
