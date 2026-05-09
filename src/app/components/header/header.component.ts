@@ -1,8 +1,9 @@
-import { Component, signal, HostListener, inject, effect } from '@angular/core';
+import { Component, signal, HostListener, inject, effect, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { FavoritesService } from '../../services/favorites.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +15,9 @@ import { FavoritesService } from '../../services/favorites.service';
 export class HeaderComponent {
   cartService = inject(CartService);
   favoritesService = inject(FavoritesService);
+  authService = inject(AuthService);
+  private router = inject(Router);
+  private elementRef = inject(ElementRef);
 
   isScrolled = signal(false);
   isMobileMenuOpen = signal(false);
@@ -21,6 +25,7 @@ export class HeaderComponent {
   activeMobileSubmenu = signal<string | null>(null);
   cartBadgePop = signal(false);
   favoritesBadgePop = signal(false);
+  isAccountMenuOpen = signal(false);
 
   private previousCartCount = 0;
 
@@ -59,6 +64,13 @@ export class HeaderComponent {
     this.isScrolled.set(window.scrollY > 50);
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.isAccountMenuOpen() && !this.elementRef.nativeElement.contains(event.target)) {
+      this.isAccountMenuOpen.set(false);
+    }
+  }
+
   openMegaMenu(label: string) {
     this.activeMegaMenu.set(label);
   }
@@ -80,5 +92,35 @@ export class HeaderComponent {
     } else {
       this.activeMobileSubmenu.set(label);
     }
+  }
+
+  onAccountClick(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.authService.user()) {
+      this.isAccountMenuOpen.update(o => !o);
+    } else {
+      this.router.navigate(['/account']);
+    }
+  }
+
+  closeAccountMenu() { this.isAccountMenuOpen.set(false); }
+
+  navigateTo(path: string) {
+    this.closeAccountMenu();
+    this.router.navigate([path]);
+  }
+
+  logout() {
+    this.authService.logout();
+    this.closeAccountMenu();
+    this.router.navigate(['/']);
+  }
+
+  getInitials(): string {
+    const u: any = this.authService.user();
+    if (!u) return '';
+    const name = u.name || u.email || '';
+    return name.split(' ').map((s: string) => s[0]).join('').slice(0, 2).toUpperCase();
   }
 }
