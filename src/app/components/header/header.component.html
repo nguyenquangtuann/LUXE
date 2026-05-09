@@ -90,8 +90,8 @@
             </button>
 
             <div class="account-wrapper">
-                <button class="action-btn-account" [class.active]="isAccountMenuOpen()" (click)="onAccountClick($event)"
-                    aria-label="Account">
+                <button class="action-btn-account" [class.active]="isAccountMenuOpen()"
+                    [class.is-icon]="!authService.user()" (click)="onAccountClick($event)" aria-label="Account">
                     @if (authService.user() && authService.user().picture) {
                     <img [src]="authService.user().picture" [alt]="authService.user().name" class="account-avatar" />
                     } @else if (authService.user()) {

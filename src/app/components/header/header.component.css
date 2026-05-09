@@ -199,6 +199,10 @@
     }
 }
 
+.action-btn-account:not(.is-icon):hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
 .action-btn-account:hover {
     background: rgba(0, 0, 0, 0.05);
 }
@@ -451,13 +455,28 @@ a.mobile-nav-link:hover {
     width: 40px;
     height: 40px;
     padding: 0;
-    border: 1px solid transparent;
     background: transparent;
     color: inherit;
     border-radius: 50%;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-btn-account:not(.is-icon):hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.3);
+    transform: translateY(-1px);
+}
+
+.action-btn-account.is-icon {
+    cursor: pointer;
+}
+
+.action-btn-account.is-icon:hover {
+    background: transparent;
+    border-color: transparent;
+    transform: none;
 }
 
 .action-btn-account:hover {
@@ -477,15 +496,15 @@ a.mobile-nav-link:hover {
 }
 
 .account-avatar {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
     object-fit: cover;
     border-radius: 50%;
 }
 
 .account-initials {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -653,12 +672,11 @@ a.mobile-nav-link:hover {
 }
 
 .dropdown-logout:hover {
-    background: rgba(255, 107, 107, 0.12);
-    color: #ff8a8a;
+    color: #ff6b6b;
 }
 
 .dropdown-logout:hover svg {
-    color: #ff8a8a;
+    color: #ff6b6b;
 }
 
 @media (max-width: 640px) {
