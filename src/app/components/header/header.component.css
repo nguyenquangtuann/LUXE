@@ -213,7 +213,7 @@
 }
 
 .action-btn:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: transparent;
 }
 
 .action-btn svg {
@@ -230,6 +230,10 @@
     justify-content: center;
     border-radius: var(--radius-full);
     transition: all var(--transition-fast);
+}
+
+.favorites-btn:hover {
+    background: transparent;
 }
 
 .favorites-btn:hover svg {
@@ -270,7 +274,7 @@
 }
 
 .cart-btn:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: transparent;
 }
 
 .cart-btn svg {
