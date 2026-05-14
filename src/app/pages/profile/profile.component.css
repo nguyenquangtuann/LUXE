@@ -1202,40 +1202,277 @@
     font-size: 14px;
 }
 
+/* ============ RESPONSIVE ============ */
 @media (max-width: 1024px) {
     .hero-left {
         position: static;
+        padding: var(--space-xl);
     }
 
     .scroll-hint {
         display: none;
     }
+
+    .profile-hero {
+        padding: var(--space-2xl) var(--space-lg);
+    }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+    .profile-page {
+        padding-top: 40px;
+    }
+
     .profile-hero {
         padding: var(--space-xl) var(--space-md);
+        gap: var(--space-lg);
+    }
+
+    .ambient-orb {
+        filter: blur(70px);
+        opacity: .35;
+    }
+
+    .orb-1 {
+        width: 280px;
+        height: 280px;
+    }
+
+    .orb-2 {
+        width: 240px;
+        height: 240px;
+    }
+
+    .orb-3 {
+        display: none;
+    }
+
+    .hero-left {
+        padding: var(--space-lg);
+    }
+
+    .hero-name {
+        font-size: 1.75rem;
+    }
+
+    .avatar-wrap {
+        width: 88px;
+        height: 88px;
+    }
+
+    .avatar-inner,
+    .avatar-img {
+        font-size: 28px;
+    }
+
+    .stat-num {
+        font-size: 1.3rem;
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    .tab-bar {
+        margin: 0 calc(var(--space-md) * -1);
+        padding: 5px;
+        border-radius: var(--radius-md);
+        justify-content: flex-start;
+    }
+
+    .tab-btn {
+        flex: 0 0 auto;
+        padding: 9px 14px;
+        font-size: 10px;
+    }
+
+    .loyalty-card {
+        padding: var(--space-lg);
+    }
+
+    .loyalty-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-lg);
+    }
+
+    .loyalty-pts {
+        text-align: left;
+    }
+
+    .pts-big {
+        font-size: 2rem;
+    }
+
+    .loyalty-ttl {
+        font-size: 1.3rem;
+    }
+
+    .perks-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-sm);
+    }
+
+    .addr-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .addr-card {
+        padding: var(--space-lg);
+    }
+
+    .settings-list {
+        padding: var(--space-xs) var(--space-lg);
+    }
+
+    .setting-row {
+        padding: var(--space-md) 0;
     }
 
     .rec-section {
         padding: var(--space-xl) var(--space-md);
     }
 
+    /* Order/Wish list — responsive */
     .order-card {
         grid-template-columns: 56px 1fr;
+        gap: var(--space-md);
+        padding: var(--space-md);
+    }
+
+    .order-thumb {
+        width: 56px;
+        height: 56px;
+    }
+
+    .order-name {
+        font-size: .95rem;
     }
 
     .order-right {
         grid-column: 1 / -1;
         text-align: left;
         display: flex;
+        justify-content: space-between;
+        align-items: center;
         gap: var(--space-md);
-        align-items: baseline;
+        padding-top: var(--space-sm);
+        border-top: 1px dashed rgba(0, 0, 0, .06);
     }
 
-    .tab-btn {
-        flex: 0 0 auto;
+    .order-date {
+        margin-top: 0;
     }
+
+    .wish-action-btns {
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-hero {
+        padding: var(--space-lg) var(--space-sm);
+    }
+
+    .hero-left {
+        padding: var(--space-md);
+        border-radius: var(--radius-lg);
+    }
+
+    .hero-name {
+        font-size: 1.5rem;
+    }
+
+    .tier-badge {
+        font-size: 9px;
+        padding: 6px 12px;
+        margin-bottom: var(--space-lg);
+    }
+
+    .stats-row {
+        margin-bottom: var(--space-lg);
+    }
+
+    .stat-num {
+        font-size: 1.15rem;
+    }
+
+    .stat-lbl {
+        font-size: 8px;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+    }
+
+    .section-sub {
+        font-size: .8rem;
+    }
+
+    .btn-gold,
+    .btn-outline {
+        font-size: 9.5px;
+        padding: 12px 18px;
+    }
+
+    .order-meta {
+        font-size: .7rem;
+    }
+
+    .order-price {
+        font-size: 1rem;
+    }
+
+    .wish-action-btns .btn-sm {
+        padding: 7px 12px;
+        font-size: 9px;
+    }
+
+    .addr-row {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .addr-row strong {
+        flex: none;
+    }
+
+    .setting-row {
+        align-items: flex-start;
+    }
+
+    .rec-card {
+        flex: 0 0 200px;
+        width: 200px;
+    }
+
+    .toast {
+        left: var(--space-md);
+        right: var(--space-md);
+        transform: translateY(20px);
+        bottom: var(--space-md);
+        justify-content: center;
+        font-size: .8rem;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+    }
+}
+
+/* Wishlist actions (list mode) */
+.wish-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-sm);
+}
+
+.wish-action-btns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 .rec-section {

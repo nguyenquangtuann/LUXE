@@ -110,26 +110,25 @@
             <!-- WISHLIST -->
             <div class="panel" *ngIf="activeTab() === 'wishlist'">
                 <ng-container *ngIf="favoriteProducts().length > 0; else emptyWish">
-                    <div class="wish-grid stagger">
-                        <article class="prod-card glass-card" *ngFor="let p of favoriteProducts()"
+                    <div class="order-list stagger">
+                        <article class="order-card glass-card" *ngFor="let p of favoriteProducts()"
                             [routerLink]="['/products', p.id]">
-                            <div class="prod-img">
-                                <img [src]="p.image" [alt]="p.name" class="prod-photo" />
-                                <div *ngIf="p.new" class="sale-tag">NEW</div>
-                                <div class="prod-overlay">
-                                    <button class="overlay-cta" (click)="addToCart(p, $event)">
-                                        Thêm vào giỏ
-                                    </button>
-                                </div>
+                            <div class="order-thumb">
+                                <img [src]="p.image" [alt]="p.name" />
                             </div>
-                            <div class="prod-info">
-                                <div class="prod-brand">{{ p.category }}</div>
-                                <div class="prod-name">{{ p.name }}</div>
-                                <div class="prod-foot">
-                                    <div class="prod-prices">
-                                        <span class="prod-price">{{ formatPrice(p.price) }}</span>
-                                    </div>
-                                    <button class="wish-btn on" (click)="removeFavorite(p, $event)">♥</button>
+                            <div class="order-info">
+                                <div class="order-name">{{ p.name }}</div>
+                                <div class="order-meta">{{ p.category }}</div>
+                                <span class="status-pill s-ship">
+                                    <span class="dot"></span>Yêu thích
+                                </span>
+                            </div>
+                            <div class="order-right wish-actions">
+                                <div class="order-price">{{ formatPrice(p.price) }}</div>
+                                <div class="wish-action-btns">
+                                    <button class="btn-sm" (click)="addToCart(p, $event)">Thêm vào giỏ</button>
+                                    <button class="wish-btn on" (click)="removeFavorite(p, $event)"
+                                        aria-label="Bỏ yêu thích">♥</button>
                                 </div>
                             </div>
                         </article>
