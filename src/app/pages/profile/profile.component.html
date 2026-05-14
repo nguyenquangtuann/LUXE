@@ -65,205 +65,218 @@
         </aside>
 
         <!-- ─────────── RIGHT: CONTENT ─────────── -->
-        <section class="hero-right">
-            <header class="section-head">
-                <div class="section-eyebrow">Tài khoản của tôi</div>
-                <h2 class="section-title">
-                    Xin chào, <em>{{ firstName() }}</em>
-                </h2>
-                <div class="section-sub">
-                    Thành viên từ tháng 3, 2023 · Đã chi tiêu <strong>124.600.000₫</strong>
+        <div class="hero-right-cell">
+            <section class="hero-right">
+                <header class="section-head">
+                    <div class="section-eyebrow">Tài khoản của tôi</div>
+                    <h2 class="section-title">
+                        Xin chào, <em>{{ firstName() }}</em>
+                    </h2>
+                    <div class="section-sub">
+                        Thành viên từ tháng 3, 2023 · Đã chi tiêu <strong>124.600.000₫</strong>
+                    </div>
+                </header>
+
+                <!-- TABS -->
+                <div class="tabs-wrap">
+                    <nav class="tab-bar" role="tablist">
+                        <button *ngFor="let t of tabs" type="button" role="tab" class="tab-btn"
+                            [class.active]="activeTab() === t.id" (click)="setTab(t.id)">
+                            {{ t.label }}
+                        </button>
+                    </nav>
                 </div>
-            </header>
 
-            <!-- TABS -->
-            <nav class="tab-bar" role="tablist">
-                <button *ngFor="let t of tabs" type="button" role="tab" class="tab-btn"
-                    [class.active]="activeTab() === t.id" (click)="setTab(t.id)">
-                    {{ t.label }}
-                </button>
-            </nav>
+                <!-- SCROLLABLE TAB CONTENT -->
+                <div class="tab-panels">
 
-            <!-- ORDERS -->
-            <div class="panel stagger" *ngIf="activeTab() === 'orders'">
-                <div class="order-list">
-                    <article class="order-card glass-card" *ngFor="let o of orders()"
-                        (click)="toast('📦 Xem chi tiết #' + o.code)">
-                        <div class="order-thumb">
-                            <img [src]="o.product.image" [alt]="o.product.name" />
+                    <!-- ORDERS -->
+                    <div class="panel stagger" *ngIf="activeTab() === 'orders'">
+                        <div class="order-list">
+                            <article class="order-card glass-card" *ngFor="let o of orders()"
+                                (click)="toast('📦 Xem chi tiết #' + o.code)">
+                                <div class="order-thumb">
+                                    <img [src]="o.product.image" [alt]="o.product.name" />
+                                </div>
+                                <div class="order-info">
+                                    <div class="order-name">{{ o.product.name }}</div>
+                                    <div class="order-meta">{{ o.product.category }} · #{{ o.code }}</div>
+                                    <span class="status-pill" [ngClass]="'s-' + o.status">
+                                        <span class="dot"></span>{{ o.statusLabel }}
+                                    </span>
+                                </div>
+                                <div class="order-right">
+                                    <div class="order-price">{{ formatPrice(o.product.price) }}</div>
+                                    <div class="order-date">{{ o.date }}</div>
+                                </div>
+                            </article>
                         </div>
-                        <div class="order-info">
-                            <div class="order-name">{{ o.product.name }}</div>
-                            <div class="order-meta">{{ o.product.category }} · #{{ o.code }}</div>
-                            <span class="status-pill" [ngClass]="'s-' + o.status">
-                                <span class="dot"></span>{{ o.statusLabel }}
-                            </span>
-                        </div>
-                        <div class="order-right">
-                            <div class="order-price">{{ formatPrice(o.product.price) }}</div>
-                            <div class="order-date">{{ o.date }}</div>
-                        </div>
-                    </article>
-                </div>
-            </div>
+                    </div>
 
-            <!-- WISHLIST -->
-            <div class="panel" *ngIf="activeTab() === 'wishlist'">
-                <ng-container *ngIf="favoriteProducts().length > 0; else emptyWish">
-                    <div class="order-list stagger">
-                        <article class="order-card glass-card" *ngFor="let p of favoriteProducts()"
-                            [routerLink]="['/products', p.id]">
-                            <div class="order-thumb">
-                                <img [src]="p.image" [alt]="p.name" />
+                    <!-- WISHLIST -->
+                    <div class="panel" *ngIf="activeTab() === 'wishlist'">
+                        <ng-container *ngIf="favoriteProducts().length > 0; else emptyWish">
+                            <div class="order-list stagger">
+                                <article class="order-card glass-card" *ngFor="let p of favoriteProducts()"
+                                    [routerLink]="['/products', p.id]">
+                                    <div class="order-thumb">
+                                        <img [src]="p.image" [alt]="p.name" />
+                                    </div>
+                                    <div class="order-info">
+                                        <div class="order-name">{{ p.name }}</div>
+                                        <div class="order-meta">{{ p.category }}</div>
+                                        <span class="status-pill s-ship">
+                                            <span class="dot"></span>Yêu thích
+                                        </span>
+                                    </div>
+                                    <div class="order-right wish-actions">
+                                        <div class="order-price">{{ formatPrice(p.price) }}</div>
+                                        <div class="wish-action-btns">
+                                            <button class="btn-sm" (click)="addToCart(p, $event)">Thêm vào giỏ</button>
+                                            <button class="wish-btn on" (click)="removeFavorite(p, $event)"
+                                                aria-label="Bỏ yêu thích">♥</button>
+                                        </div>
+                                    </div>
+                                </article>
                             </div>
-                            <div class="order-info">
-                                <div class="order-name">{{ p.name }}</div>
-                                <div class="order-meta">{{ p.category }}</div>
-                                <span class="status-pill s-ship">
-                                    <span class="dot"></span>Yêu thích
-                                </span>
+                        </ng-container>
+                        <ng-template #emptyWish>
+                            <div class="empty-wish glass-card">
+                                <div class="empty-ico">♡</div>
+                                <h3 class="empty-ttl">Chưa có sản phẩm yêu thích</h3>
+                                <p class="empty-sub">
+                                    Hãy khám phá bộ sưu tập và nhấn ♡ để lưu lại những món đồ bạn yêu thích.
+                                </p>
+                                <a class="btn-gold" routerLink="/products">
+                                    <span>Khám phá sản phẩm</span>
+                                    <span class="btn-arrow">→</span>
+                                </a>
                             </div>
-                            <div class="order-right wish-actions">
-                                <div class="order-price">{{ formatPrice(p.price) }}</div>
-                                <div class="wish-action-btns">
-                                    <button class="btn-sm" (click)="addToCart(p, $event)">Thêm vào giỏ</button>
-                                    <button class="wish-btn on" (click)="removeFavorite(p, $event)"
-                                        aria-label="Bỏ yêu thích">♥</button>
+                        </ng-template>
+                    </div>
+
+                    <!-- LOYALTY -->
+                    <div class="panel" *ngIf="activeTab() === 'loyalty'">
+                        <div class="loyalty-card glass-card">
+                            <div class="loyalty-shine"></div>
+                            <div class="loyalty-top">
+                                <div>
+                                    <div class="loyalty-ttl">LUXE Gold Card</div>
+                                    <div class="loyalty-sub">Gold Member · Cấp 3 / 5</div>
+                                </div>
+                                <div class="loyalty-pts">
+                                    <div class="pts-big">3,200</div>
+                                    <div class="pts-lbl">Điểm tích lũy</div>
                                 </div>
                             </div>
-                        </article>
-                    </div>
-                </ng-container>
-                <ng-template #emptyWish>
-                    <div class="empty-wish glass-card">
-                        <div class="empty-ico">♡</div>
-                        <h3 class="empty-ttl">Chưa có sản phẩm yêu thích</h3>
-                        <p class="empty-sub">
-                            Hãy khám phá bộ sưu tập và nhấn ♡ để lưu lại những món đồ bạn yêu thích.
-                        </p>
-                        <a class="btn-gold" routerLink="/products">
-                            <span>Khám phá sản phẩm</span>
-                            <span class="btn-arrow">→</span>
-                        </a>
-                    </div>
-                </ng-template>
-            </div>
-
-            <!-- LOYALTY -->
-            <div class="panel" *ngIf="activeTab() === 'loyalty'">
-                <div class="loyalty-card glass-card">
-                    <div class="loyalty-shine"></div>
-                    <div class="loyalty-top">
-                        <div>
-                            <div class="loyalty-ttl">LUXE Gold Card</div>
-                            <div class="loyalty-sub">Gold Member · Cấp 3 / 5</div>
+                            <div class="prog-labels">
+                                <span>Gold · 3,200</span>
+                                <span>Platinum — cần thêm 800 điểm</span>
+                            </div>
+                            <div class="prog-track">
+                                <div class="prog-fill" [style.width.%]="progressPct"></div>
+                            </div>
+                            <div class="perks-grid">
+                                <div class="perk"><span class="perk-ico">🚚</span>
+                                    <div class="perk-txt">Miễn phí vận chuyển</div>
+                                </div>
+                                <div class="perk"><span class="perk-ico">🎁</span>
+                                    <div class="perk-txt">Quà sinh nhật</div>
+                                </div>
+                                <div class="perk"><span class="perk-ico">🏷️</span>
+                                    <div class="perk-txt">Ưu tiên giảm giá</div>
+                                </div>
+                                <div class="perk"><span class="perk-ico">✨</span>
+                                    <div class="perk-txt">Truy cập sớm</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="loyalty-pts">
-                            <div class="pts-big">3,200</div>
-                            <div class="pts-lbl">Điểm tích lũy</div>
-                        </div>
-                    </div>
-                    <div class="prog-labels">
-                        <span>Gold · 3,200</span>
-                        <span>Platinum — cần thêm 800 điểm</span>
-                    </div>
-                    <div class="prog-track">
-                        <div class="prog-fill" [style.width.%]="progressPct"></div>
-                    </div>
-                    <div class="perks-grid">
-                        <div class="perk"><span class="perk-ico">🚚</span>
-                            <div class="perk-txt">Miễn phí vận chuyển</div>
-                        </div>
-                        <div class="perk"><span class="perk-ico">🎁</span>
-                            <div class="perk-txt">Quà sinh nhật</div>
-                        </div>
-                        <div class="perk"><span class="perk-ico">🏷️</span>
-                            <div class="perk-txt">Ưu tiên giảm giá</div>
-                        </div>
-                        <div class="perk"><span class="perk-ico">✨</span>
-                            <div class="perk-txt">Truy cập sớm</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ADDRESSES -->
-            <div class="panel" *ngIf="activeTab() === 'addresses'">
-                <div class="addr-grid stagger">
-                    <article class="addr-card glass-card">
-                        <div class="addr-badge">Mặc định</div>
-                        <div class="addr-head">Địa chỉ nhà</div>
-                        <div class="addr-row"><strong>Họ tên</strong><span>Nguyễn Hoàng Minh Anh</span></div>
-                        <div class="addr-row"><strong>Địa chỉ</strong><span>42 Phố Lý Thường Kiệt, Hoàn Kiếm</span>
-                        </div>
-                        <div class="addr-row"><strong>Thành phố</strong><span>Hà Nội, 10000</span></div>
-                        <div class="addr-row"><strong>Điện thoại</strong><span>+84 912 345 678</span></div>
-                        <div class="addr-actions">
-                            <button class="btn-sm" (click)="toast('✏️ Chỉnh sửa địa chỉ nhà')">Chỉnh sửa</button>
-                        </div>
-                    </article>
-
-                    <article class="addr-card glass-card">
-                        <div class="addr-head">Địa chỉ văn phòng</div>
-                        <div class="addr-row"><strong>Họ tên</strong><span>Minh Anh Nguyễn</span></div>
-                        <div class="addr-row"><strong>Địa chỉ</strong><span>Tầng 12, Golden Tower, Cầu Giấy</span></div>
-                        <div class="addr-row"><strong>Thành phố</strong><span>Hà Nội, 11300</span></div>
-                        <div class="addr-row"><strong>Điện thoại</strong><span>+84 912 345 678</span></div>
-                        <div class="addr-actions">
-                            <button class="btn-sm" (click)="toast('✏️ Chỉnh sửa địa chỉ VP')">Chỉnh sửa</button>
-                            <button class="btn-sm danger" (click)="toast('🗑️ Đã xoá địa chỉ')">Xoá</button>
-                        </div>
-                    </article>
-                </div>
-                <button class="btn-add" (click)="toast('➕ Thêm địa chỉ mới')">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                    Thêm địa chỉ mới
-                </button>
-            </div>
-
-            <!-- SETTINGS -->
-            <div class="panel stagger" *ngIf="activeTab() === 'settings'">
-                <div class="settings-list glass-card">
-                    <div class="setting-row" *ngFor="let s of settings()">
-                        <div>
-                            <div class="setting-lbl">{{ s.label }}</div>
-                            <div class="setting-sub">{{ s.sub }}</div>
-                        </div>
-                        <button class="toggle" [class.on]="s.on" (click)="toggleSetting(s.id)"
-                            [attr.aria-pressed]="s.on"></button>
                     </div>
 
-                    <div class="setting-row">
-                        <div>
-                            <div class="setting-lbl">Bảo mật 2 lớp (2FA)</div>
-                            <div class="setting-sub">Xác thực qua ứng dụng authenticator</div>
-                        </div>
-                        <button class="btn-sm" (click)="toast('🔐 Thiết lập 2FA')">Thiết lập</button>
-                    </div>
+                    <!-- ADDRESSES -->
+                    <div class="panel" *ngIf="activeTab() === 'addresses'">
+                        <div class="addr-grid stagger">
+                            <article class="addr-card glass-card">
+                                <div class="addr-badge">Mặc định</div>
+                                <div class="addr-head">Địa chỉ nhà</div>
+                                <div class="addr-row"><strong>Họ tên</strong><span>Nguyễn Hoàng Minh Anh</span></div>
+                                <div class="addr-row"><strong>Địa chỉ</strong><span>42 Phố Lý Thường Kiệt, Hoàn
+                                        Kiếm</span>
+                                </div>
+                                <div class="addr-row"><strong>Thành phố</strong><span>Hà Nội, 10000</span></div>
+                                <div class="addr-row"><strong>Điện thoại</strong><span>+84 912 345 678</span></div>
+                                <div class="addr-actions">
+                                    <button class="btn-sm" (click)="toast('✏️ Chỉnh sửa địa chỉ nhà')">Chỉnh
+                                        sửa</button>
+                                </div>
+                            </article>
 
-                    <div class="setting-row">
-                        <div>
-                            <div class="setting-lbl">Đổi mật khẩu</div>
-                            <div class="setting-sub">Cập nhật lần cuối: 3 tháng trước</div>
+                            <article class="addr-card glass-card">
+                                <div class="addr-head">Địa chỉ văn phòng</div>
+                                <div class="addr-row"><strong>Họ tên</strong><span>Minh Anh Nguyễn</span></div>
+                                <div class="addr-row"><strong>Địa chỉ</strong><span>Tầng 12, Golden Tower, Cầu
+                                        Giấy</span></div>
+                                <div class="addr-row"><strong>Thành phố</strong><span>Hà Nội, 11300</span></div>
+                                <div class="addr-row"><strong>Điện thoại</strong><span>+84 912 345 678</span></div>
+                                <div class="addr-actions">
+                                    <button class="btn-sm" (click)="toast('✏️ Chỉnh sửa địa chỉ VP')">Chỉnh sửa</button>
+                                    <button class="btn-sm danger" (click)="toast('🗑️ Đã xoá địa chỉ')">Xoá</button>
+                                </div>
+                            </article>
                         </div>
-                        <button class="btn-sm" (click)="toast('🔑 Đổi mật khẩu')">Đổi</button>
-                    </div>
-
-                    <div class="setting-row">
-                        <div>
-                            <div class="setting-lbl danger-lbl">Xoá tài khoản</div>
-                            <div class="setting-sub">Hành động không thể hoàn tác</div>
-                        </div>
-                        <button class="btn-sm danger" (click)="toast('⚠️ Xác nhận để xoá tài khoản')">
-                            Xoá tài khoản
+                        <button class="btn-add" (click)="toast('➕ Thêm địa chỉ mới')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            Thêm địa chỉ mới
                         </button>
                     </div>
+
+                    <!-- SETTINGS -->
+                    <div class="panel stagger" *ngIf="activeTab() === 'settings'">
+                        <div class="settings-list glass-card">
+                            <div class="setting-row" *ngFor="let s of settings()">
+                                <div>
+                                    <div class="setting-lbl">{{ s.label }}</div>
+                                    <div class="setting-sub">{{ s.sub }}</div>
+                                </div>
+                                <button class="toggle" [class.on]="s.on" (click)="toggleSetting(s.id)"
+                                    [attr.aria-pressed]="s.on"></button>
+                            </div>
+
+                            <div class="setting-row">
+                                <div>
+                                    <div class="setting-lbl">Bảo mật 2 lớp (2FA)</div>
+                                    <div class="setting-sub">Xác thực qua ứng dụng authenticator</div>
+                                </div>
+                                <button class="btn-sm" (click)="toast('🔐 Thiết lập 2FA')">Thiết lập</button>
+                            </div>
+
+                            <div class="setting-row">
+                                <div>
+                                    <div class="setting-lbl">Đổi mật khẩu</div>
+                                    <div class="setting-sub">Cập nhật lần cuối: 3 tháng trước</div>
+                                </div>
+                                <button class="btn-sm" (click)="toast('🔑 Đổi mật khẩu')">Đổi</button>
+                            </div>
+
+                            <div class="setting-row">
+                                <div>
+                                    <div class="setting-lbl danger-lbl">Xoá tài khoản</div>
+                                    <div class="setting-sub">Hành động không thể hoàn tác</div>
+                                </div>
+                                <button class="btn-sm danger" (click)="toast('⚠️ Xác nhận để xoá tài khoản')">
+                                    Xoá tài khoản
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
+                <!-- /tab-panels -->
+            </section>
+        </div>
     </div>
 
     <!-- ─────────── RECOMMENDED ─────────── -->

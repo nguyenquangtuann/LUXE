@@ -58,13 +58,81 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: var(--space-3xl) var(--space-lg);
-    align-items: start;
+    align-items: stretch;
+}
+
+/* RIGHT cell: chiều cao do LEFT quyết định, RIGHT scroll bên trong */
+.hero-right-cell {
+    position: relative;
+    min-height: 0;
+    min-width: 0;
+}
+
+.hero-right-cell>.hero-right {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Header + tab bar luôn cố định, không scroll */
+.hero-right-cell>.hero-right>.section-head,
+.hero-right-cell>.hero-right>.tab-bar {
+    flex: 0 0 auto;
+}
+
+/* Chỉ phần nội dung tab mới scroll */
+.hero-right-cell>.hero-right>.tab-panels {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201, 169, 98, .55) transparent;
+}
+
+.hero-right-cell>.hero-right>.tab-panels::-webkit-scrollbar {
+    width: 8px;
+}
+
+.hero-right-cell>.hero-right>.tab-panels::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.hero-right-cell>.hero-right>.tab-panels::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(201, 169, 98, .35), rgba(201, 169, 98, .75));
+    border-radius: 999px;
+}
+
+.hero-right-cell>.hero-right>.tab-panels::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gold);
 }
 
 @media (max-width: 1024px) {
     .profile-hero {
         grid-template-columns: 1fr;
         gap: var(--space-xl);
+        align-items: start;
+    }
+
+    /* Trên tablet/mobile: bỏ giới hạn chiều cao, trả về flow tự nhiên */
+    .hero-right-cell {
+        min-height: auto;
+    }
+
+    .hero-right-cell>.hero-right {
+        position: static;
+        inset: auto;
+        display: block;
+        overflow: visible;
+    }
+
+    .hero-right-cell>.hero-right>.tab-panels {
+        overflow: visible;
+        padding-right: 0;
     }
 }
 
@@ -1204,6 +1272,18 @@
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1024px) {
+    .profile-page {
+        padding-top: 60px;
+    }
+
+    .tabs-wrap {
+        padding-top: 20px;
+    }
+
+    .panel {
+        padding-top: 10px;
+    }
+
     .hero-left {
         position: static;
         padding: var(--space-xl);
@@ -1221,6 +1301,14 @@
 @media (max-width: 768px) {
     .profile-page {
         padding-top: 40px;
+    }
+
+    .tabs-wrap {
+        padding-top: 20px;
+    }
+
+    .panel {
+        padding-top: 10px;
     }
 
     .profile-hero {
@@ -1371,6 +1459,18 @@
 }
 
 @media (max-width: 480px) {
+    .profile-page {
+        padding-top: 60px;
+    }
+
+    .tabs-wrap {
+        padding-top: 20px;
+    }
+
+    .panel {
+        padding-top: 10px;
+    }
+
     .profile-hero {
         padding: var(--space-lg) var(--space-sm);
     }
@@ -1641,8 +1741,495 @@
 }
 
 @media (max-width: 640px) {
+    .profile-page {
+        padding-top: 60px;
+    }
+
+    .tabs-wrap {
+        padding-top: 20px;
+    }
+
+    .panel {
+        padding-top: 10px;
+    }
+
     .rec-card {
         flex: 0 0 220px;
         width: 220px;
+    }
+}
+
+/* ============ MOBILE POLISH (refined) ============ */
+@media (max-width: 768px) {
+    .profile-page {
+        padding-top: 40px;
+    }
+
+    .profile-hero {
+        padding: var(--space-lg) var(--space-md);
+        gap: var(--space-lg);
+    }
+
+    .tabs-wrap {
+        padding-top: 20px;
+    }
+
+    .panel {
+        padding-top: 10px;
+    }
+
+    /* Hero LEFT — gọn lại, căn giữa cho cảm giác card profile */
+    .hero-left {
+        padding: var(--space-xl) var(--space-lg);
+        text-align: center;
+        align-items: center;
+    }
+
+    .hero-left::before {
+        width: 240px;
+        height: 240px;
+        right: -90px;
+    }
+
+    .hero-left::after {
+        width: 160px;
+        height: 160px;
+        left: -60px;
+        bottom: -60px;
+    }
+
+    .season-tag {
+        margin: 0 auto var(--space-lg);
+    }
+
+    .avatar-wrap {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-handle {
+        justify-content: center;
+    }
+
+    .tier-badge {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .stats-row {
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .hero-btns {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .hero-btns .btn-gold,
+    .hero-btns .btn-outline {
+        flex: 1 1 140px;
+        min-width: 0;
+        padding: 12px 16px;
+        font-size: 10px;
+    }
+
+    /* Section heading */
+    .section-eyebrow {
+        font-size: 9px;
+        gap: var(--space-sm);
+    }
+
+    .section-title {
+        font-size: clamp(1.4rem, 5vw, 1.8rem);
+    }
+
+    .section-sub {
+        font-size: .8rem;
+    }
+
+    .tab-bar {
+        margin: 0 calc(var(--space-md) * -1);
+        padding: 5px 8px;
+        border-radius: var(--radius-lg);
+        gap: 5px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    .tab-btn {
+        flex: 0 0 auto;
+        padding: 9px 14px;
+        font-size: 10px;
+        letter-spacing: .12em;
+        scroll-snap-align: start;
+    }
+
+    /* Order / Wishlist list — bố cục dạng list gọn cho mobile */
+    .order-card {
+        grid-template-columns: 64px 1fr;
+        gap: var(--space-md);
+        padding: var(--space-md);
+        align-items: flex-start;
+    }
+
+    .order-thumb {
+        width: 64px;
+        height: 64px;
+    }
+
+    .order-info {
+        gap: 6px;
+    }
+
+    .order-name {
+        font-size: .95rem;
+        line-height: 1.25;
+    }
+
+    .order-meta {
+        font-size: .72rem;
+    }
+
+    .order-right {
+        grid-column: 1 / -1;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-md);
+        padding-top: var(--space-sm);
+        margin-top: 2px;
+        border-top: 1px dashed rgba(0, 0, 0, .08);
+    }
+
+    .order-price {
+        font-size: 1rem;
+    }
+
+    .order-date {
+        margin-top: 0;
+        font-size: .72rem;
+    }
+
+    .wish-actions {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .wish-action-btns {
+        flex-shrink: 0;
+        gap: 6px;
+    }
+
+    .wish-action-btns .btn-sm {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+
+    /* Loyalty */
+    .loyalty-card {
+        padding: var(--space-lg);
+    }
+
+    .loyalty-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-lg);
+    }
+
+    .loyalty-pts {
+        text-align: left;
+    }
+
+    .pts-big {
+        font-size: 1.9rem;
+    }
+
+    .loyalty-ttl {
+        font-size: 1.2rem;
+    }
+
+    .perks-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-sm);
+    }
+
+    .perk {
+        padding: var(--space-md);
+    }
+
+    /* Addresses */
+    .addr-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .addr-card {
+        padding: var(--space-lg);
+    }
+
+    .addr-actions {
+        flex-wrap: wrap;
+    }
+
+    /* Settings */
+    .settings-list {
+        padding: var(--space-xs) var(--space-lg);
+    }
+
+    .setting-row {
+        padding: var(--space-md) 0;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+    }
+
+    .setting-row>div {
+        flex: 1 1 60%;
+        min-width: 0;
+    }
+
+    /* Recommended */
+    .rec-section {
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    .rec-head {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-md);
+        flex-wrap: wrap;
+    }
+
+    .rec-title {
+        font-size: clamp(1.3rem, 5vw, 1.7rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-page {
+        padding-top: 80px;
+    }
+
+    .tabs-wrap {
+        padding: 20px 15px 0 15px;
+    }
+
+    .panel {
+        padding-top: 10px;
+    }
+
+    .profile-hero {
+        padding: var(--space-md) var(--space-sm);
+        gap: var(--space-lg);
+    }
+
+    .hero-left {
+        padding: var(--space-lg) var(--space-md);
+        border-radius: var(--radius-lg);
+    }
+
+    .avatar-wrap {
+        width: 84px;
+        height: 84px;
+    }
+
+    .avatar-inner,
+    .avatar-img {
+        font-size: 26px;
+    }
+
+    .hero-name {
+        font-size: 1.5rem;
+    }
+
+    .hero-handle {
+        font-size: 10px;
+        letter-spacing: .12em;
+    }
+
+    .tier-badge {
+        font-size: 9px;
+        padding: 6px 12px;
+        margin-bottom: var(--space-md);
+    }
+
+    .stats-row {
+        margin-bottom: var(--space-md);
+        gap: var(--space-sm);
+    }
+
+    .stat-num {
+        font-size: 1.1rem;
+    }
+
+    .stat-lbl {
+        font-size: 8px;
+        letter-spacing: .14em;
+    }
+
+    .hero-btns .btn-gold,
+    .hero-btns .btn-outline {
+        flex: 1 1 100%;
+        font-size: 10px;
+        padding: 12px 16px;
+    }
+
+    .section-title {
+        font-size: 1.35rem;
+    }
+
+    .section-sub {
+        font-size: .75rem;
+    }
+
+    .tab-btn {
+        padding: 8px 8px;
+        font-size: 9.5px;
+    }
+
+    /* Order/Wish — siêu gọn cho màn hình nhỏ */
+    .order-card {
+        grid-template-columns: 56px 1fr;
+        gap: var(--space-sm);
+        padding: var(--space-md);
+    }
+
+    .order-thumb {
+        width: 56px;
+        height: 56px;
+    }
+
+    .order-name {
+        font-size: .9rem;
+    }
+
+    .order-meta {
+        font-size: .68rem;
+    }
+
+    .order-price {
+        font-size: .95rem;
+    }
+
+    .status-pill {
+        font-size: 9px;
+        padding: 3px 8px;
+    }
+
+    .wish-action-btns {
+        flex-direction: row;
+        gap: 6px;
+    }
+
+    .wish-action-btns .btn-sm {
+        padding: 7px 10px;
+        font-size: 9.5px;
+    }
+
+    .wish-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .perks-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pts-big {
+        font-size: 1.7rem;
+    }
+
+    .addr-row {
+        flex-direction: column;
+        gap: 2px;
+        align-items: flex-start;
+    }
+
+    .addr-row strong {
+        flex: none;
+    }
+
+    .setting-row {
+        align-items: flex-start;
+    }
+
+    .rec-card {
+        flex: 0 0 200px;
+        width: 200px;
+    }
+
+    .rec-section {
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    .toast {
+        left: var(--space-md);
+        right: var(--space-md);
+        bottom: var(--space-md);
+        transform: translateY(20px);
+        justify-content: center;
+        font-size: .8rem;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+    }
+
+    /* Empty wishlist */
+    .empty-wish {
+        padding: var(--space-2xl) var(--space-lg);
+    }
+
+    .empty-wish .empty-ico {
+        font-size: 52px;
+    }
+
+    .empty-wish .empty-ttl {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 391px) {
+    .profile-page {
+        padding-top: 80px;
+    }
+
+    .panel {
+        padding-top: 10px;
+    }
+
+    .tab-bar {
+        padding: 5px;
+    }
+
+    .tab-btn {
+        padding: 8px 6px;
+    }
+
+    .stats-row {
+        gap: 6px;
+    }
+
+    .stat-num {
+        font-size: 1rem;
+    }
+
+    .hero-name {
+        font-size: 1.35rem;
+    }
+
+    .order-card {
+        grid-template-columns: 48px 1fr;
+    }
+
+    .order-thumb {
+        width: 48px;
+        height: 48px;
     }
 }
