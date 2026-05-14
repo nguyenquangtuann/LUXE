@@ -2033,6 +2033,15 @@
         border-radius: var(--radius-lg);
     }
 
+    .tab-bar {
+        margin: 0 calc(var(--space-md) * -1);
+        padding: 5px 8px;
+        border-radius: var(--radius-lg);
+        gap: 5px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
     .avatar-wrap {
         width: 84px;
         height: 84px;
@@ -2195,6 +2204,17 @@
     }
 }
 
+@media (max-width: 415px) {
+    .tab-bar {
+        margin: 0 calc(var(--space-md) * -1);
+        padding: 5px 8px;
+        border-radius: var(--radius-lg);
+        gap: 1px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+}
+
 @media (max-width: 391px) {
     .profile-page {
         padding-top: 80px;
@@ -2209,7 +2229,7 @@
     }
 
     .tab-btn {
-        padding: 8px 6px;
+        padding: 8px 5px;
     }
 
     .stats-row {
@@ -2231,5 +2251,35 @@
     .order-thumb {
         width: 48px;
         height: 48px;
+    }
+
+    .tab-bar {
+        margin: 0 calc(var(--space-md) * -1);
+        padding: 5px 8px;
+        border-radius: var(--radius-lg);
+        gap: 2px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+}
+
+@media (max-width: 376px) {
+    .tab-btn {
+        padding: 8px 4px;
+    }
+}
+
+@media (max-width: 361px) {
+    .tab-btn {
+        padding: 8px 3px;
+    }
+
+    .tab-bar {
+        margin: 0 calc(var(--space-md) * -1);
+        padding: 5px 8px;
+        border-radius: var(--radius-lg);
+        gap: 1px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
     }
 }
