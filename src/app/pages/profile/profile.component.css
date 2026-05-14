@@ -1298,7 +1298,7 @@
     }
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .profile-page {
         padding-top: 40px;
     }
@@ -1422,7 +1422,6 @@
         padding: var(--space-xl) var(--space-md);
     }
 
-    /* Order/Wish list — responsive */
     .order-card {
         grid-template-columns: 56px 1fr;
         gap: var(--space-md);
@@ -1456,9 +1455,9 @@
     .wish-action-btns {
         flex-shrink: 0;
     }
-}
+} */
 
-@media (max-width: 480px) {
+/* @media (max-width: 480px) {
     .profile-page {
         padding-top: 60px;
     }
@@ -1559,7 +1558,7 @@
     .toast.show {
         transform: translateY(0);
     }
-}
+} */
 
 /* Wishlist actions (list mode) */
 .wish-actions {
@@ -1740,7 +1739,7 @@
     background: linear-gradient(-90deg, var(--color-cream, #faf7f2), transparent);
 }
 
-@media (max-width: 640px) {
+/* @media (max-width: 640px) {
     .profile-page {
         padding-top: 60px;
     }
@@ -1757,21 +1756,17 @@
         flex: 0 0 220px;
         width: 220px;
     }
-}
+} */
 
 /* ============ MOBILE POLISH (refined) ============ */
 @media (max-width: 768px) {
     .profile-page {
-        padding-top: 40px;
+        padding-top: 80px;
     }
 
     .profile-hero {
         padding: var(--space-lg) var(--space-md);
         gap: var(--space-lg);
-    }
-
-    .tabs-wrap {
-        padding-top: 20px;
     }
 
     .panel {
@@ -1851,24 +1846,6 @@
         font-size: .8rem;
     }
 
-    .tab-bar {
-        margin: 0 calc(var(--space-md) * -1);
-        padding: 5px 8px;
-        border-radius: var(--radius-lg);
-        gap: 5px;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-    }
-
-    .tab-btn {
-        flex: 0 0 auto;
-        padding: 9px 14px;
-        font-size: 10px;
-        letter-spacing: .12em;
-        scroll-snap-align: start;
-    }
-
-    /* Order / Wishlist list — bố cục dạng list gọn cho mobile */
     .order-card {
         grid-template-columns: 64px 1fr;
         gap: var(--space-md);
@@ -2010,6 +1987,490 @@
     }
 }
 
+@media (max-width: 570px) {
+    .profile-page {
+        padding-top: 80px;
+    }
+
+    .profile-hero {
+        padding: var(--space-lg) var(--space-md);
+        gap: var(--space-lg);
+    }
+
+    .tabs-wrap {
+        padding: 20px 15px 0 15px;
+    }
+
+    .panel {
+        padding-top: 10px;
+    }
+
+    .hero-left {
+        padding: var(--space-xl) var(--space-lg);
+        text-align: center;
+        align-items: center;
+    }
+
+    .hero-left::before {
+        width: 240px;
+        height: 240px;
+        right: -90px;
+    }
+
+    .hero-left::after {
+        width: 160px;
+        height: 160px;
+        left: -60px;
+        bottom: -60px;
+    }
+
+    .season-tag {
+        margin: 0 auto var(--space-lg);
+    }
+
+    .avatar-wrap {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-handle {
+        justify-content: center;
+    }
+
+    .tier-badge {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .stats-row {
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .hero-btns {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .hero-btns .btn-gold,
+    .hero-btns .btn-outline {
+        flex: 1 1 140px;
+        min-width: 0;
+        padding: 12px 16px;
+        font-size: 10px;
+    }
+
+    .section-eyebrow {
+        font-size: 9px;
+        gap: var(--space-sm);
+    }
+
+    .section-title {
+        font-size: clamp(1.4rem, 5vw, 1.8rem);
+    }
+
+    .section-sub {
+        font-size: .8rem;
+    }
+
+    .tab-bar {
+        margin: 0 calc(var(--space-md) * -1);
+        padding: 5px 8px;
+        border-radius: var(--radius-lg);
+        gap: 5px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    .tab-btn {
+        padding: 9px 14px;
+        font-size: 10px;
+        letter-spacing: .12em;
+        scroll-snap-align: start;
+    }
+
+    .order-card {
+        grid-template-columns: 64px 1fr;
+        gap: var(--space-md);
+        padding: var(--space-md);
+        align-items: flex-start;
+    }
+
+    .order-thumb {
+        width: 64px;
+        height: 64px;
+    }
+
+    .order-info {
+        gap: 6px;
+    }
+
+    .order-name {
+        font-size: .95rem;
+        line-height: 1.25;
+    }
+
+    .order-meta {
+        font-size: .72rem;
+    }
+
+    .order-right {
+        grid-column: 1 / -1;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-md);
+        padding-top: var(--space-sm);
+        margin-top: 2px;
+        border-top: 1px dashed rgba(0, 0, 0, .08);
+    }
+
+    .order-price {
+        font-size: 1rem;
+    }
+
+    .order-date {
+        margin-top: 0;
+        font-size: .72rem;
+    }
+
+    .wish-actions {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .wish-action-btns {
+        flex-shrink: 0;
+        gap: 6px;
+    }
+
+    .wish-action-btns .btn-sm {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+
+    .loyalty-card {
+        padding: var(--space-lg);
+    }
+
+    .loyalty-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-lg);
+    }
+
+    .loyalty-pts {
+        text-align: left;
+    }
+
+    .pts-big {
+        font-size: 1.9rem;
+    }
+
+    .loyalty-ttl {
+        font-size: 1.2rem;
+    }
+
+    .perks-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-sm);
+    }
+
+    .perk {
+        padding: var(--space-md);
+    }
+
+    .addr-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .addr-card {
+        padding: var(--space-lg);
+    }
+
+    .addr-actions {
+        flex-wrap: wrap;
+    }
+
+    .settings-list {
+        padding: var(--space-xs) var(--space-lg);
+    }
+
+    .setting-row {
+        padding: var(--space-md) 0;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+    }
+
+    .setting-row>div {
+        flex: 1 1 60%;
+        min-width: 0;
+    }
+
+    .rec-section {
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    .rec-head {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-md);
+        flex-wrap: wrap;
+    }
+
+    .rec-title {
+        font-size: clamp(1.3rem, 5vw, 1.7rem);
+    }
+}
+
+@media (max-width: 555px) {
+    .profile-page {
+        padding-top: 80px;
+    }
+
+    .profile-hero {
+        padding: var(--space-lg) var(--space-md);
+        gap: var(--space-lg);
+    }
+
+    .tabs-wrap {
+        padding: 20px 15px 0 15px;
+    }
+
+    .panel {
+        padding-top: 10px;
+    }
+
+    .hero-left {
+        padding: var(--space-xl) var(--space-lg);
+        text-align: center;
+        align-items: center;
+    }
+
+    .hero-left::before {
+        width: 240px;
+        height: 240px;
+        right: -90px;
+    }
+
+    .hero-left::after {
+        width: 160px;
+        height: 160px;
+        left: -60px;
+        bottom: -60px;
+    }
+
+    .season-tag {
+        margin: 0 auto var(--space-lg);
+    }
+
+    .avatar-wrap {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-handle {
+        justify-content: center;
+    }
+
+    .tier-badge {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .stats-row {
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .hero-btns {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .hero-btns .btn-gold,
+    .hero-btns .btn-outline {
+        flex: 1 1 140px;
+        min-width: 0;
+        padding: 12px 16px;
+        font-size: 10px;
+    }
+
+    .section-eyebrow {
+        font-size: 9px;
+        gap: var(--space-sm);
+    }
+
+    .section-title {
+        font-size: clamp(1.4rem, 5vw, 1.8rem);
+    }
+
+    .section-sub {
+        font-size: .8rem;
+    }
+
+    .tab-bar {
+        margin: 0 calc(var(--space-md) * -1);
+        padding: 5px 8px;
+        border-radius: var(--radius-lg);
+        gap: 5px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    .tab-btn {
+        padding: 9px 14px;
+        font-size: 10px;
+        letter-spacing: .12em;
+        scroll-snap-align: start;
+    }
+
+    .order-card {
+        grid-template-columns: 64px 1fr;
+        gap: var(--space-md);
+        padding: var(--space-md);
+        align-items: flex-start;
+    }
+
+    .order-thumb {
+        width: 64px;
+        height: 64px;
+    }
+
+    .order-info {
+        gap: 6px;
+    }
+
+    .order-name {
+        font-size: .95rem;
+        line-height: 1.25;
+    }
+
+    .order-meta {
+        font-size: .72rem;
+    }
+
+    .order-right {
+        grid-column: 1 / -1;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-md);
+        padding-top: var(--space-sm);
+        margin-top: 2px;
+        border-top: 1px dashed rgba(0, 0, 0, .08);
+    }
+
+    .order-price {
+        font-size: 1rem;
+    }
+
+    .order-date {
+        margin-top: 0;
+        font-size: .72rem;
+    }
+
+    .wish-actions {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .wish-action-btns {
+        flex-shrink: 0;
+        gap: 6px;
+    }
+
+    .wish-action-btns .btn-sm {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+
+    .loyalty-card {
+        padding: var(--space-lg);
+    }
+
+    .loyalty-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-lg);
+    }
+
+    .loyalty-pts {
+        text-align: left;
+    }
+
+    .pts-big {
+        font-size: 1.9rem;
+    }
+
+    .loyalty-ttl {
+        font-size: 1.2rem;
+    }
+
+    .perks-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-sm);
+    }
+
+    .perk {
+        padding: var(--space-md);
+    }
+
+    .addr-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .addr-card {
+        padding: var(--space-lg);
+    }
+
+    .addr-actions {
+        flex-wrap: wrap;
+    }
+
+    .settings-list {
+        padding: var(--space-xs) var(--space-lg);
+    }
+
+    .setting-row {
+        padding: var(--space-md) 0;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+    }
+
+    .setting-row>div {
+        flex: 1 1 60%;
+        min-width: 0;
+    }
+
+    .rec-section {
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    .rec-head {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-md);
+        flex-wrap: wrap;
+    }
+
+    .rec-title {
+        font-size: clamp(1.3rem, 5vw, 1.7rem);
+    }
+}
+
 @media (max-width: 480px) {
     .profile-page {
         padding-top: 80px;
@@ -2098,7 +2559,7 @@
 
     .tab-btn {
         padding: 8px 8px;
-        font-size: 9.5px;
+        font-size: 8.5px;
     }
 
     /* Order/Wish — siêu gọn cho màn hình nhỏ */
