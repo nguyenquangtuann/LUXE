@@ -225,6 +225,11 @@ export class AccountComponent implements OnInit, OnDestroy {
       this.registerPassword = '';
       this.otpDigits.set(['', '', '', '', '', '']);
       this.agreeTerms = false;
+
+      this.countdown.set(0);
+      clearInterval(this.countdownTimer);
+      this.countdownTimer = null;
+      this.registerSuccess.set(false);
     }, 1500);
   }
 
