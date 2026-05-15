@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -15,11 +15,10 @@ import emailjs from '@emailjs/browser';
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css']
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   private router = inject(Router);
 
-  // Đọc user trực tiếp từ AuthService (signal)
   get userProfile() { return this.authService.user(); }
 
   activeTab = signal<'login' | 'register'>('login');
@@ -42,21 +41,29 @@ export class AccountComponent implements OnInit {
   showRegisterPassword = signal<boolean>(false);
   registerError = signal<string>('');
   registerSuccess = signal<boolean>(false);
+  checksuccessotp = signal<boolean>(false);
 
-  //send code otp
+  // Passcode (OTP)
+  otpDigits = signal<string[]>(['', '', '', '', '', '']);
+  countdown = signal<number>(0);
+  private countdownTimer: any = null;
+  private readonly RESEND_SECONDS = 60;
+
+  // EmailJS config
   private SERVICE_ID = 'service_kkr2lmd';
   private TEMPLATE_ID = 'template_6xw8k3q';
   private PUBLIC_KEY = 'w30nxF8pT-xl7ygGO';
 
   generatedOTP: string = '';
-  userEnteredOTP: string = '';
 
   ngOnInit(): void {
-    // Khởi tạo Google client thông qua AuthService
     this.authService.initGoogle();
   }
 
-  // Click nút "Đăng nhập với Google"
+  ngOnDestroy(): void {
+    if (this.countdownTimer) clearInterval(this.countdownTimer);
+  }
+
   async loginWithCustomButton() {
     try {
       await this.authService.loginWithGoogle();
@@ -73,21 +80,18 @@ export class AccountComponent implements OnInit {
 
   onLogin() {
     this.loginError.set('');
-
     if (!this.loginEmail || !this.loginPassword) {
       this.loginError.set('Please fill in all fields');
       return;
     }
-
     this.isLoading.set(true);
-
     setTimeout(() => {
       this.isLoading.set(false);
       let user = localStorage.getItem('user_data');
       if (user) {
         let data = JSON.parse(user);
         if (data.email === this.loginEmail && data.pass === this.loginPassword) {
-          this.authService.user.set(data); // Cập nhật user trong AuthService
+          this.authService.user.set(data);
           this.router.navigate(['/']);
         } else {
           this.loginError.set('Invalid email or password.');
@@ -98,6 +102,74 @@ export class AccountComponent implements OnInit {
     }, 1500);
   }
 
+  // ==== Passcode handlers ====
+  onOtpInput(index: number, event: Event) {
+    const input = event.target as HTMLInputElement;
+    const val = input.value.replace(/\D/g, '').slice(-1);
+    const arr = [...this.otpDigits()];
+    arr[index] = val;
+    this.otpDigits.set(arr);
+    input.value = val;
+    if (val && index < 5) {
+      const next = input.parentElement?.children[index + 1] as HTMLInputElement | undefined;
+      next?.focus();
+    }
+  }
+
+  onOtpKeydown(index: number, event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    if (event.key === 'Backspace' && !input.value && index > 0) {
+      const prev = input.parentElement?.children[index - 1] as HTMLInputElement | undefined;
+      prev?.focus();
+    } else if (event.key === 'ArrowLeft' && index > 0) {
+      (input.parentElement?.children[index - 1] as HTMLInputElement)?.focus();
+    } else if (event.key === 'ArrowRight' && index < 5) {
+      (input.parentElement?.children[index + 1] as HTMLInputElement)?.focus();
+    }
+  }
+
+  onOtpPaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const text = (event.clipboardData?.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+    if (!text) return;
+    const arr = ['', '', '', '', '', ''];
+    for (let i = 0; i < text.length; i++) arr[i] = text[i];
+    this.otpDigits.set(arr);
+    const container = (event.target as HTMLInputElement).parentElement;
+    const focusIdx = Math.min(text.length, 5);
+    (container?.children[focusIdx] as HTMLInputElement)?.focus();
+  }
+
+  private getOtpValue(): string {
+    return this.otpDigits().join('');
+  }
+
+  private startCountdown() {
+    this.countdown.set(this.RESEND_SECONDS);
+    if (this.countdownTimer) clearInterval(this.countdownTimer);
+    this.countdownTimer = setInterval(() => {
+      const next = this.countdown() - 1;
+      if (next <= 0) {
+        this.countdown.set(0);
+        clearInterval(this.countdownTimer);
+        this.countdownTimer = null;
+      } else {
+        this.countdown.set(next);
+      }
+    }, 1000);
+  }
+
+  async onSendCode() {
+    this.registerError.set('');
+    if (!this.registerEmail) {
+      this.registerError.set('Please enter your email first');
+      return;
+    }
+    const name = (this.firstName + ' ' + this.lastName).trim() || 'User';
+    this.startCountdown();
+    await this.sendVerificationEmail(name, this.registerEmail);
+  }
+
   onRegister() {
     this.registerError.set('');
     this.registerSuccess.set(false);
@@ -106,23 +178,37 @@ export class AccountComponent implements OnInit {
       this.registerError.set('Please fill in all fields');
       return;
     }
-
     if (this.registerPassword.length < 8) {
       this.registerError.set('Password must be at least 8 characters');
       return;
     }
-
     if (!this.agreeTerms) {
       this.registerError.set('Please agree to the Terms of Service');
       return;
     }
-    this.isLoading.set(true);
 
+    const otp = this.getOtpValue();
+    if (otp.length !== 6) {
+      this.registerError.set('Please enter the 6-digit verification code');
+      return;
+    }
+    const savedOTP = sessionStorage.getItem('temp_otp');
+    if (!savedOTP) {
+      this.registerError.set('Please request a verification code first');
+      return;
+    }
+    if (otp !== savedOTP) {
+      this.registerError.set('Invalid verification code');
+      this.checksuccessotp.set(true);
+      return;
+    }
+
+    this.isLoading.set(true);
     setTimeout(() => {
       this.isLoading.set(false);
       this.registerSuccess.set(true);
       const user = {
-        sub: "local_" + Math.random().toString(36).substr(2, 9), // Tạo ID ngẫu nhiên
+        sub: 'local_' + Math.random().toString(36).substr(2, 9),
         name: this.firstName + ' ' + this.lastName,
         given_name: this.firstName,
         family_name: this.lastName,
@@ -131,67 +217,36 @@ export class AccountComponent implements OnInit {
         email_verified: true,
         pass: this.registerPassword
       };
-
-      const name = this.firstName + ' ' + this.lastName;
-      const email = this.registerEmail;
-
-      this.sendVerificationEmail(name, email);
-
-      // localStorage.setItem('user_data', JSON.stringify(user));
-      // localStorage.setItem('token', 'fake-jwt-token');
-
-      // this.firstName = '';
-      // this.lastName = '';
-      // this.registerEmail = '';
-      // this.registerPassword = '';
-      // this.agreeTerms = false;
-      // this.activeTab.set('login');
+      localStorage.setItem('user_data', JSON.stringify(user));
+      localStorage.setItem('user_token', 'fake-jwt-token');
+      sessionStorage.removeItem('temp_otp');
+      this.checksuccessotp.set(false);
+      this.activeTab.set('login');
     }, 1500);
   }
 
-  //send OTP code to email
   generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
   async sendVerificationEmail(userName: string, userEmail: string) {
     this.generatedOTP = this.generateOTP();
-
     const templateParams = {
       user_name: userName,
       user_email: userEmail,
-      otp_code: this.generatedOTP, // Mã này sẽ điền vào {{otp_code}} trong template
+      otp_code: this.generatedOTP,
     };
-
     try {
       const response = await emailjs.send(
-        this.SERVICE_ID,
-        this.TEMPLATE_ID,
-        templateParams,
-        this.PUBLIC_KEY
+        this.SERVICE_ID, this.TEMPLATE_ID, templateParams, this.PUBLIC_KEY
       );
-
-      console.log('Email đã được gửi thành công!', response.status, response.text);
-      alert('Một mã xác thực đã được gửi đến email của bạn!');
-
-      // Lưu OTP vào localStorage hoặc biến tạm để so khớp sau này
+      console.log('Email sent!', response.status, response.text);
       sessionStorage.setItem('temp_otp', this.generatedOTP);
-
     } catch (error) {
-      console.error('Gửi mail thất bại...', error);
-      alert('Có lỗi xảy ra khi gửi mail.');
-    }
-  }
-
-  verifyOTP() {
-    const savedOTP = sessionStorage.getItem('temp_otp');
-
-    if (this.userEnteredOTP === savedOTP) {
-      alert('Xác thực thành công! Đang tạo tài khoản...');
-      // Tiến hành lưu JSON vào localStorage như bài trước mình làm
-      
-    } else {
-      alert('Mã xác thực không đúng, vui lòng kiểm tra lại.');
+      console.error('Send mail failed', error);
+      this.registerError.set('Could not send verification email. Please try again.');
+      this.countdown.set(0);
+      if (this.countdownTimer) { clearInterval(this.countdownTimer); this.countdownTimer = null; }
     }
   }
 }

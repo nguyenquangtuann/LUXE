@@ -333,3 +333,84 @@
     font-weight: 500;
     color: var(--color-slate-light);
 }
+
+.passcode-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.passcode-inputs {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.passcode-input {
+    flex: 1;
+    min-width: 0;
+    max-width: 40px;
+    height: 48px;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-slate);
+    background: var(--color-off-white);
+    border: 1px solid var(--color-gold-light);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+}
+
+.passcode-input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    background: var(--color-white);
+    box-shadow: 0 0 0 3px rgba(191, 149, 63, 0.15);
+}
+
+.get-code-btn {
+    flex-shrink: 0;
+    min-width: 90px;
+    height: 48px;
+    background: var(--color-slate);
+    color: var(--color-white);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.get-code-btn:hover:not(:disabled) {
+    background: var(--color-gold);
+}
+
+.get-code-btn:disabled {
+    background: var(--color-off-white);
+    color: var(--color-slate-light);
+    cursor: not-allowed;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.get-code-btn .countdown {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+}
+
+@media (max-width: 480px) {
+    .passcode-input {
+        height: 44px;
+        font-size: 1.05rem;
+    }
+
+    .get-code-btn {
+        min-width: 92px;
+        height: 44px;
+        font-size: 0.75rem;
+        padding: 0 var(--space-sm);
+    }
+}

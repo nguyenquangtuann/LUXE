@@ -126,7 +126,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Email Address</label>
-                    <input type="email" class="form-input" placeholder="Enter your email" [(ngModel)]="registerEmail"
+                    <input type="email" email #emailModel="ngModel" class="form-input" placeholder="Enter your email" [(ngModel)]="registerEmail"
                         name="registerEmail" required />
                 </div>
 
@@ -157,6 +157,29 @@
                     <p class="password-hint">Must be at least 8 characters</p>
                 </div>
 
+                <!-- Passcode (OTP) -->
+                <div class="form-group">
+                    <label class="form-label">Verification Code</label>
+                    <div class="passcode-row">
+                        <div class="passcode-inputs">
+                            @for (digit of otpDigits(); track $index) {
+                            <input #otpInput type="text" inputmode="numeric" maxlength="1" class="passcode-input"
+                                [value]="digit" (input)="onOtpInput($index, $event)"
+                                (keydown)="onOtpKeydown($index, $event)" (paste)="onOtpPaste($event)" />
+                            }
+                        </div>
+                        <button type="button" class="get-code-btn" [disabled]="countdown() > 0 || emailModel.invalid"
+                            (click)="onSendCode()">
+                            @if (countdown() > 0) {
+                            <span class="countdown">{{ countdown() }}s</span>
+                            } @else {
+                            Get Code
+                            }
+                        </button>
+                    </div>
+                    <p class="password-hint">Enter the 6-digit code sent to your email</p>
+                </div>
+
                 <div class="form-group">
                     <label class="checkbox-label">
                         <input type="checkbox" [(ngModel)]="agreeTerms" name="agreeTerms" required />
@@ -177,7 +200,7 @@
                 </div>
                 }
 
-                <button type="submit" class="submit-btn" [disabled]="!agreeTerms || isLoading()">
+                <button type="submit" class="submit-btn" [disabled]="!agreeTerms || isLoading() || checksuccessotp()">
                     @if (isLoading()) {
                     <span class="spinner"></span>
                     Creating account...
