@@ -41,7 +41,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   showRegisterPassword = signal<boolean>(false);
   registerError = signal<string>('');
   registerSuccess = signal<boolean>(false);
-  checksuccessotp = signal<boolean>(false);
 
   // Passcode (OTP)
   otpDigits = signal<string[]>(['', '', '', '', '', '']);
@@ -91,6 +90,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       if (user) {
         let data = JSON.parse(user);
         if (data.email === this.loginEmail && data.pass === this.loginPassword) {
+          localStorage.setItem('token', 'fake-jwt-token');
           this.authService.user.set(data);
           this.router.navigate(['/']);
         } else {
@@ -199,7 +199,6 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
     if (otp !== savedOTP) {
       this.registerError.set('Invalid verification code');
-      this.checksuccessotp.set(true);
       return;
     }
 
@@ -218,10 +217,14 @@ export class AccountComponent implements OnInit, OnDestroy {
         pass: this.registerPassword
       };
       localStorage.setItem('user_data', JSON.stringify(user));
-      localStorage.setItem('user_token', 'fake-jwt-token');
       sessionStorage.removeItem('temp_otp');
-      this.checksuccessotp.set(false);
       this.activeTab.set('login');
+      this.firstName = '';
+      this.lastName = '';
+      this.registerEmail = '';
+      this.registerPassword = '';
+      this.otpDigits.set(['', '', '', '', '', '']);
+      this.agreeTerms = false;
     }, 1500);
   }
 

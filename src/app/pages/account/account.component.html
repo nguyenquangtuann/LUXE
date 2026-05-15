@@ -200,7 +200,7 @@
                 </div>
                 }
 
-                <button type="submit" class="submit-btn" [disabled]="!agreeTerms || isLoading() || checksuccessotp()">
+                <button type="submit" class="submit-btn" [disabled]="(!agreeTerms && otpDigits()) || isLoading()">
                     @if (isLoading()) {
                     <span class="spinner"></span>
                     Creating account...

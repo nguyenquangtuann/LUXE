@@ -13,11 +13,13 @@ export class AuthService {
 
     constructor() {
         // Khôi phục user đã lưu (nếu có)
-        const saved = localStorage.getItem('user_data');
-        if (saved) {
-            try { this.user.set(JSON.parse(saved)); } catch { }
-        }
         this.accessToken = localStorage.getItem('token');
+        if (this.accessToken != null) {
+            const saved = localStorage.getItem('user_data');
+            if (saved) {
+                try { this.user.set(JSON.parse(saved)); } catch { }
+            }
+        }
     }
 
     /** Tải thư viện GSI và khởi tạo token client */
