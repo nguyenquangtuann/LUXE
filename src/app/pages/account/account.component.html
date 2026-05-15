@@ -177,7 +177,7 @@
                 </div>
                 }
 
-                <button type="submit" class="submit-btn" [disabled]="isLoading()">
+                <button type="submit" class="submit-btn" [disabled]="!agreeTerms || isLoading()">
                     @if (isLoading()) {
                     <span class="spinner"></span>
                     Creating account...
