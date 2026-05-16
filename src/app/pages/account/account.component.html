@@ -67,8 +67,8 @@
                 </div>
                 }
 
-                <button type="submit" class="submit-btn" [disabled]="isLoading()">
-                    @if (isLoading()) {
+                <button type="submit" class="submit-btn" [disabled]="authService.isLoading()">
+                    @if (authService.isLoading()) {
                     <span class="spinner"></span>
                     Signing in...
                     } @else {
@@ -200,8 +200,8 @@
                 </div>
                 }
 
-                <button type="submit" class="submit-btn" [disabled]="(!agreeTerms && otpDigits()) || isLoading()">
-                    @if (isLoading()) {
+                <button type="submit" class="submit-btn" [disabled]="(!agreeTerms && otpDigits()) || authService.isLoading()">
+                    @if (authService.isLoading()) {
                     <span class="spinner"></span>
                     Creating account...
                     } @else {

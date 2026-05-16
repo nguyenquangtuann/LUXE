@@ -6,7 +6,6 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar.component';
 import { AuthService } from '../../services/auth.service';
-import emailjs from '@emailjs/browser';
 
 @Component({
   selector: 'app-account',
@@ -20,40 +19,29 @@ export class AccountComponent implements OnInit, OnDestroy {
   private router = inject(Router);
 
   get userProfile() { return this.authService.user(); }
+  get isLoading() { return this.authService.isLoading(); }
 
   activeTab = signal<'login' | 'register'>('login');
-  isLoading = signal<boolean>(false);
 
-  // Login
   loginEmail = '';
   loginPassword = '';
   rememberMe = false;
   showLoginPassword = signal<boolean>(false);
   loginError = signal<string>('');
 
-  // Register
   firstName = '';
   lastName = '';
   registerEmail = '';
   registerPassword = '';
-  avatarUrl = 'https://ui-avatars.com/api/?name=User&background=random';
   agreeTerms = false;
   showRegisterPassword = signal<boolean>(false);
   registerError = signal<string>('');
   registerSuccess = signal<boolean>(false);
 
-  // Passcode (OTP)
   otpDigits = signal<string[]>(['', '', '', '', '', '']);
   countdown = signal<number>(0);
   private countdownTimer: any = null;
   private readonly RESEND_SECONDS = 60;
-
-  // EmailJS config
-  private SERVICE_ID = 'service_kkr2lmd';
-  private TEMPLATE_ID = 'template_6xw8k3q';
-  private PUBLIC_KEY = 'w30nxF8pT-xl7ygGO';
-
-  generatedOTP: string = '';
 
   ngOnInit(): void {
     this.authService.initGoogle();
@@ -68,41 +56,79 @@ export class AccountComponent implements OnInit, OnDestroy {
       await this.authService.loginWithGoogle();
       this.router.navigate(['/']);
     } catch (err) {
-      console.error('Google login failed:', err);
       this.loginError.set('Đăng nhập Google thất bại, vui lòng thử lại.');
     }
   }
 
-  logout() {
-    this.authService.logout();
-  }
-
-  onLogin() {
+  async onLogin() {
     this.loginError.set('');
     if (!this.loginEmail || !this.loginPassword) {
       this.loginError.set('Please fill in all fields');
       return;
     }
-    this.isLoading.set(true);
-    setTimeout(() => {
-      this.isLoading.set(false);
-      let user = localStorage.getItem('user_data');
-      if (user) {
-        let data = JSON.parse(user);
-        if (data.email === this.loginEmail && data.pass === this.loginPassword) {
-          localStorage.setItem('token', 'fake-jwt-token');
-          this.authService.user.set(data);
-          this.router.navigate(['/']);
-        } else {
-          this.loginError.set('Invalid email or password.');
-        }
-      } else {
-        this.loginError.set('Invalid email or password.');
-      }
-    }, 1500);
+
+    const success = await this.authService.loginLocal(this.loginEmail, this.loginPassword);
+    if (success) {
+      this.router.navigate(['/']);
+    } else {
+      this.loginError.set('Invalid email or password.');
+    }
   }
 
-  // ==== Passcode handlers ====
+  async onSendCode() {
+    this.registerError.set('');
+    if (!this.registerEmail) {
+      this.registerError.set('Please enter your email first');
+      return;
+    }
+
+    const name = `${this.firstName} ${this.lastName}`.trim() || 'User';
+    this.startCountdown();
+
+    const isSent = await this.authService.sendOtpEmail(name, this.registerEmail);
+    if (!isSent) {
+      this.registerError.set('Could not send verification email. Please try again.');
+      this.stopCountdown();
+    }
+  }
+
+  async onRegister() {
+    this.registerError.set('');
+    if (!this.firstName || !this.lastName || !this.registerEmail || !this.registerPassword) {
+      this.registerError.set('Please fill in all fields'); return;
+    }
+    if (this.registerPassword.length < 8) {
+      this.registerError.set('Password must be at least 8 characters'); return;
+    }
+    if (!this.agreeTerms) {
+      this.registerError.set('Please agree to the Terms of Service'); return;
+    }
+
+    const otp = this.otpDigits().join('');
+    if (otp.length !== 6) {
+      this.registerError.set('Please enter the 6-digit verification code'); return;
+    }
+
+    const savedOTP = sessionStorage.getItem('temp_otp');
+    if (!savedOTP) {
+      this.registerError.set('Please request a verification code first'); return;
+    }
+    if (otp !== savedOTP) {
+      this.registerError.set('Invalid verification code'); return;
+    }
+
+    await this.authService.registerLocal({
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.registerEmail,
+      pass: this.registerPassword
+    });
+
+    this.registerSuccess.set(true);
+    this.activeTab.set('login');
+    this.clearRegisterForm();
+  }
+
   onOtpInput(index: number, event: Event) {
     const input = event.target as HTMLInputElement;
     const val = input.value.replace(/\D/g, '').slice(-1);
@@ -111,16 +137,14 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.otpDigits.set(arr);
     input.value = val;
     if (val && index < 5) {
-      const next = input.parentElement?.children[index + 1] as HTMLInputElement | undefined;
-      next?.focus();
+      (input.parentElement?.children[index + 1] as HTMLInputElement | undefined)?.focus();
     }
   }
 
   onOtpKeydown(index: number, event: KeyboardEvent) {
     const input = event.target as HTMLInputElement;
     if (event.key === 'Backspace' && !input.value && index > 0) {
-      const prev = input.parentElement?.children[index - 1] as HTMLInputElement | undefined;
-      prev?.focus();
+      (input.parentElement?.children[index - 1] as HTMLInputElement | undefined)?.focus();
     } else if (event.key === 'ArrowLeft' && index > 0) {
       (input.parentElement?.children[index - 1] as HTMLInputElement)?.focus();
     } else if (event.key === 'ArrowRight' && index < 5) {
@@ -136,12 +160,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     for (let i = 0; i < text.length; i++) arr[i] = text[i];
     this.otpDigits.set(arr);
     const container = (event.target as HTMLInputElement).parentElement;
-    const focusIdx = Math.min(text.length, 5);
-    (container?.children[focusIdx] as HTMLInputElement)?.focus();
-  }
-
-  private getOtpValue(): string {
-    return this.otpDigits().join('');
+    (container?.children[Math.min(text.length, 5)] as HTMLInputElement)?.focus();
   }
 
   private startCountdown() {
@@ -149,112 +168,32 @@ export class AccountComponent implements OnInit, OnDestroy {
     if (this.countdownTimer) clearInterval(this.countdownTimer);
     this.countdownTimer = setInterval(() => {
       const next = this.countdown() - 1;
-      if (next <= 0) {
-        this.countdown.set(0);
-        clearInterval(this.countdownTimer);
-        this.countdownTimer = null;
-      } else {
-        this.countdown.set(next);
-      }
+      if (next <= 0) this.stopCountdown();
+      else this.countdown.set(next);
     }, 1000);
   }
 
-  async onSendCode() {
-    this.registerError.set('');
-    if (!this.registerEmail) {
-      this.registerError.set('Please enter your email first');
-      return;
-    }
-    const name = (this.firstName + ' ' + this.lastName).trim() || 'User';
-    this.startCountdown();
-    await this.sendVerificationEmail(name, this.registerEmail);
-  }
-
-  onRegister() {
-    this.registerError.set('');
-    this.registerSuccess.set(false);
-
-    if (!this.firstName || !this.lastName || !this.registerEmail || !this.registerPassword) {
-      this.registerError.set('Please fill in all fields');
-      return;
-    }
-    if (this.registerPassword.length < 8) {
-      this.registerError.set('Password must be at least 8 characters');
-      return;
-    }
-    if (!this.agreeTerms) {
-      this.registerError.set('Please agree to the Terms of Service');
-      return;
-    }
-
-    const otp = this.getOtpValue();
-    if (otp.length !== 6) {
-      this.registerError.set('Please enter the 6-digit verification code');
-      return;
-    }
-    const savedOTP = sessionStorage.getItem('temp_otp');
-    if (!savedOTP) {
-      this.registerError.set('Please request a verification code first');
-      return;
-    }
-    if (otp !== savedOTP) {
-      this.registerError.set('Invalid verification code');
-      return;
-    }
-
-    this.isLoading.set(true);
-    setTimeout(() => {
-      this.isLoading.set(false);
-      this.registerSuccess.set(true);
-      const user = {
-        sub: 'local_' + Math.random().toString(36).substr(2, 9),
-        name: this.firstName + ' ' + this.lastName,
-        given_name: this.firstName,
-        family_name: this.lastName,
-        picture: this.avatarUrl,
-        email: this.registerEmail,
-        email_verified: true,
-        pass: this.registerPassword
-      };
-      localStorage.setItem('user_data', JSON.stringify(user));
-      sessionStorage.removeItem('temp_otp');
-      this.activeTab.set('login');
-      this.firstName = '';
-      this.lastName = '';
-      this.registerEmail = '';
-      this.registerPassword = '';
-      this.otpDigits.set(['', '', '', '', '', '']);
-      this.agreeTerms = false;
-
-      this.countdown.set(0);
+  private stopCountdown() {
+    this.countdown.set(0);
+    if (this.countdownTimer) {
       clearInterval(this.countdownTimer);
       this.countdownTimer = null;
-      this.registerSuccess.set(false);
-    }, 1500);
-  }
-
-  generateOTP() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
-  async sendVerificationEmail(userName: string, userEmail: string) {
-    this.generatedOTP = this.generateOTP();
-    const templateParams = {
-      user_name: userName,
-      user_email: userEmail,
-      otp_code: this.generatedOTP,
-    };
-    try {
-      const response = await emailjs.send(
-        this.SERVICE_ID, this.TEMPLATE_ID, templateParams, this.PUBLIC_KEY
-      );
-      console.log('Email sent!', response.status, response.text);
-      sessionStorage.setItem('temp_otp', this.generatedOTP);
-    } catch (error) {
-      console.error('Send mail failed', error);
-      this.registerError.set('Could not send verification email. Please try again.');
-      this.countdown.set(0);
-      if (this.countdownTimer) { clearInterval(this.countdownTimer); this.countdownTimer = null; }
     }
+    sessionStorage.removeItem('temp_otp');
+  }
+
+  private clearRegisterForm() {
+    this.firstName = '';
+    this.lastName = '';
+    this.registerEmail = '';
+    this.registerPassword = '';
+    this.otpDigits.set(['', '', '', '', '', '']);
+    this.agreeTerms = false;
+    this.stopCountdown();
+    setTimeout(() => this.registerSuccess.set(false), 3000);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }
